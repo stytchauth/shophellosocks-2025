@@ -9,6 +9,7 @@ import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import zIndex from "@mui/material/styles/zIndex";
 import { display } from "@mui/system";
 import { green } from "@mui/material/colors";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
 const Home: NextPage = () => {
   return (
@@ -20,77 +21,76 @@ const Home: NextPage = () => {
           content="An ecommerce demo application powered by Stytch"
         />
       </Head>
-      <header>
-        <Box
-          sx={{
-            display: "flex",
-            backgroundColor: "#ECFFF5",
-            width: "100%",
-            padding: "8px 24px",
-            justifyContent: "center",
-            flexGrow: 1,
-          }}
-        >
-          <Typography>
-            Hello Socks is a demo application created by Stytch. You can learn
-            more about Stytch{" "}
-            <Link
-              target="_blank"
-              rel="noopener"
-              href="https://stytch.com/"
-              sx={{
-                color: "#19303D",
-                fontWeight: 500,
-                textDecorationColor: "#19303D",
-              }}
-            >
-              here
-            </Link>{" "}
-            {" or "}{" "}
-            <Link
-              href="mailto:startups@stytch.com?subject=Contact Stytch via Hello Socks"
-              sx={{
-                color: "#19303D",
-                fontWeight: 500,
-                textDecorationColor: "#19303D",
-              }}
-            >
-              contact us
-            </Link>{" "}
-            if you would like to talk to an auth expert.
-          </Typography>
-        </Box>
-        <Box
-          padding={3}
-          display="flex"
-          alignItems={"center"}
-          justifyContent="space-between"
-        >
-          <Stack direction="row" gap={4}>
-            <Image src={"/logo.svg"} alt="logo" width={160} height={30} />
-            <Typography variant="h3">Socks</Typography>
-            <Typography variant="h3">Kids</Typography>
-            <Typography variant="h3">Gifts</Typography>
-            <Typography variant="h3">Featured</Typography>
-            <Typography variant="h3">Community</Typography>
-          </Stack>
-          <Stack gap={2} direction="row" alignItems={"center"}>
-            <Typography variant="h3">Log in</Typography>
-            <Box sx={{ borderLeft: "2px solid #5C727D" }} height="27px" />
-            <SearchOutlinedIcon sx={{ fontSize: 32 }} />
-            <Box sx={{ borderLeft: "2px solid #5C727D" }} height="27px" />
-            <FavoriteBorderOutlinedIcon sx={{ fontSize: 32 }} />
-            <Box sx={{ borderLeft: "2px solid #5C727D" }} height="27px" />
-            <ShoppingCartOutlinedIcon sx={{ fontSize: 32 }} />
-          </Stack>
-        </Box>
-      </header>
+
+      <Box
+        sx={{
+          display: "flex",
+          backgroundColor: "#ECFFF5",
+          width: "100%",
+          padding: "8px 24px",
+          justifyContent: "center",
+          zIndex: 2,
+        }}
+      >
+        <Typography>
+          Hello Socks is a demo application created by Stytch. You can learn
+          more about Stytch{" "}
+          <Link
+            target="_blank"
+            rel="noopener"
+            href="https://stytch.com/"
+            sx={{
+              color: "#19303D",
+              fontWeight: 500,
+              textDecorationColor: "#19303D",
+            }}
+          >
+            here
+          </Link>{" "}
+          {" or "}{" "}
+          <Link
+            href="mailto:startups@stytch.com?subject=Contact Stytch via Hello Socks"
+            sx={{
+              color: "#19303D",
+              fontWeight: 500,
+              textDecorationColor: "#19303D",
+            }}
+          >
+            contact us
+          </Link>{" "}
+          if you would like to talk to an auth expert.
+        </Typography>
+      </Box>
+      <Box
+        padding={3}
+        display="flex"
+        alignItems={"center"}
+        justifyContent="space-between"
+        sx={{ backgroundColor: "white", zIndex: 2 }}
+      >
+        <Stack direction="row" gap={4}>
+          <Image src={"/logo.svg"} alt="logo" width={160} height={30} />
+          <Typography variant="h3">Socks</Typography>
+          <Typography variant="h3">Kids</Typography>
+          <Typography variant="h3">Gifts</Typography>
+          <Typography variant="h3">Featured</Typography>
+          <Typography variant="h3">Community</Typography>
+        </Stack>
+        <Stack gap={2} direction="row" alignItems={"center"}>
+          <Typography variant="h3">Log in</Typography>
+          <Box sx={{ borderLeft: "2px solid #5C727D" }} height="27px" />
+          <SearchOutlinedIcon sx={{ fontSize: 32, color: "#000" }} />
+          <Box sx={{ borderLeft: "2px solid #5C727D" }} height="27px" />
+          <FavoriteBorderOutlinedIcon sx={{ fontSize: 32, color: "#000" }} />
+          <Box sx={{ borderLeft: "2px solid #5C727D" }} height="27px" />
+          <ShoppingCartOutlinedIcon sx={{ fontSize: 32, color: "#000" }} />
+        </Stack>
+      </Box>
 
       <Box
         sx={{
           width: "100%",
           backgroundColor: "#FFD94A",
-          flexGrow: 1,
           minHeight: "650px",
           borderTop: "2px solid #000000",
           position: "relative",
@@ -100,23 +100,47 @@ const Home: NextPage = () => {
         }}
       >
         <Box
-          height={"80%"}
-          sx={{ backgroundColor: "white", zIndex: 2 }}
+          sx={{ zIndex: 2 }}
           display="flex"
+          alignItems={"center"}
+          width="100%"
+          maxWidth="1500px"
+          justifyContent={"space-around"}
         >
-          <Box>
-            <Typography>JUST DROPPED</Typography>
-            <Typography>The lightest socks you can stomp around in.</Typography>
-            <Box>
-              <Typography>Explore the collection</Typography>
+          <Box width={350}>
+            <Typography
+              sx={{ fontSize: 22, lineHeight: "30px", fontWeight: 500 }}
+            >
+              JUST DROPPED
+            </Typography>
+            <Typography
+              mt={2}
+              sx={{ fontSize: 40, lineHeight: "50px", fontWeight: 600 }}
+            >
+              The lightest socks you can stomp around in.
+            </Typography>
+            <Box
+              sx={{
+                border: "2px solid black",
+                backgroundColor: "white",
+                boxShadow: "0px 3px 0px #000",
+              }}
+              paddingY={1}
+              paddingX={2}
+              width="fit-content"
+            >
+              <Typography
+                sx={{ fontSize: 18, lineHeight: "31.5px", fontWeight: 600 }}
+              >
+                Explore the collection
+              </Typography>
             </Box>
           </Box>
-          <Box>
-            <Typography>JUST DROPPED</Typography>
-            <Typography>The lightest socks you can stomp around in.</Typography>
-            <Box>
-              <Typography>Explore the collection</Typography>
-            </Box>
+          <Box
+            sx={{ backgroundColor: "white", border: "2px solid black" }}
+            padding={3}
+          >
+            <Image src={"/orange.png"} alt="socks" width={515} height={434} />
           </Box>
         </Box>
         <Box
@@ -185,10 +209,40 @@ const Home: NextPage = () => {
           }}
         />
       </Box>
+      <Box
+        sx={{ backgroundColor: "white", zIndex: 2 }}
+        paddingY={4}
+        paddingX={12}
+        alignItems="center"
+        display={"flex"}
+        width="100%"
+        flexDirection={"column"}
+      >
+        <Box maxWidth={"1500px"} width="100%">
+          <Typography variant="h2">Hello Socks IRL</Typography>
+          <Typography variant="h4">
+            Tag @hellosocks to be featured here!
+          </Typography>
+          <Stack
+            direction={"row"}
+            mt={2}
+            alignItems="center"
+            justifyContent={"space-between"}
+            gap={2}
+            flexWrap="wrap"
+          >
+            <Image src={"/tennis.png"} alt="socks" width={275} height={275} />
+            <Image src={"/golf.png"} alt="socks" width={275} height={275} />
+            <Image src={"/rainbow.png"} alt="socks" width={275} height={275} />
+            <Image src={"/camp.png"} alt="socks" width={275} height={275} />
+            <ArrowForwardIosIcon sx={{ fontSize: 32 }} />
+          </Stack>
+        </Box>
+      </Box>
 
       <Box
         sx={{
-          zIndex: 1,
+          zIndex: 2,
           // backgroundColor: "#fff",
           position: "relative",
           borderTop: "2px solid #000000",
@@ -196,6 +250,10 @@ const Home: NextPage = () => {
         }}
         paddingY={4}
         paddingX={2}
+        flexGrow={1}
+        display="flex"
+        alignItems={"center"}
+        justifyContent="space-between"
       >
         <Stack direction={"row"} gap={4}>
           <Typography variant="h4" sx={{ color: "white" }}>
@@ -208,6 +266,7 @@ const Home: NextPage = () => {
             Find a store
           </Typography>
         </Stack>
+        <Image src={"/socials.png"} alt="social" width={288} height={54} />
       </Box>
     </Box>
   );
