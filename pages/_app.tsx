@@ -1,7 +1,8 @@
 import "../styles/globals.css";
 import { createTheme, ThemeProvider } from "@mui/material";
 import type { AppProps } from "next/app";
-import { OTPMethods } from "@stytch/vanilla-js";
+import { createStytchUIClient } from "@stytch/nextjs/ui";
+import { StytchProvider } from "@stytch/nextjs";
 
 const theme = createTheme({
   typography: {
@@ -49,10 +50,16 @@ const theme = createTheme({
   },
 });
 
+const stytch = createStytchUIClient(
+  process.env.NEXT_PUBLIC_STYTCH_PUBLIC_TOKEN || ""
+);
+
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ThemeProvider theme={theme}>
-      <Component {...pageProps} />
+      <StytchProvider stytch={stytch}>
+        <Component {...pageProps} />
+      </StytchProvider>
     </ThemeProvider>
   );
 }

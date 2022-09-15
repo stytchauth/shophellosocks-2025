@@ -10,8 +10,11 @@ import zIndex from "@mui/material/styles/zIndex";
 import { display } from "@mui/system";
 import { green } from "@mui/material/colors";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import LoginBackdrop from "../components/LoginBackdrop";
+import { useState } from "react";
 
 const Home: NextPage = () => {
+  const [loginOpen, setLoginOpen] = useState(true);
   return (
     <Box minHeight={"100vh"} display="flex" flexDirection={"column"}>
       <Head>
@@ -21,6 +24,7 @@ const Home: NextPage = () => {
           content="An ecommerce demo application powered by Stytch"
         />
       </Head>
+      <LoginBackdrop open={loginOpen} onDismiss={() => setLoginOpen(false)} />
 
       <Box
         sx={{
@@ -77,7 +81,9 @@ const Home: NextPage = () => {
           <Typography variant="h3">Community</Typography>
         </Stack>
         <Stack gap={2} direction="row" alignItems={"center"}>
-          <Typography variant="h3">Log in</Typography>
+          <Button onClick={() => setLoginOpen(true)}>
+            <Typography variant="h3">Log in</Typography>
+          </Button>
           <Box sx={{ borderLeft: "2px solid #5C727D" }} height="27px" />
           <SearchOutlinedIcon sx={{ fontSize: 32, color: "#000" }} />
           <Box sx={{ borderLeft: "2px solid #5C727D" }} height="27px" />
