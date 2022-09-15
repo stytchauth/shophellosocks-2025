@@ -21,7 +21,7 @@ type Props = {
 const sdkStyle: StyleConfig = {
   fontFamily: '"Helvetica New", Helvetica, sans-serif',
   primaryColor: "#000000",
-  primaryTextColor: "#FFFFFF",
+
   hideHeaderText: true,
 };
 
@@ -75,7 +75,7 @@ function LoginBackdrop({ open, onDismiss }: Props) {
           <Box width={"32px"}></Box>
         </Stack>
         <Image src="/smile.png" alt="smile!" width={53} height={53} />
-        <Box paddingX={8} mt={3}>
+        <Box paddingX={8} mt={3} sx={{ color: "black" }}>
           <StytchLogin config={sdkConfig} styles={sdkStyle} />
         </Box>
       </Box>

@@ -12,9 +12,11 @@ import { green } from "@mui/material/colors";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import LoginBackdrop from "../components/LoginBackdrop";
 import { useState } from "react";
+import Header from "../components/Header";
 
 const Home: NextPage = () => {
-  const [loginOpen, setLoginOpen] = useState(true);
+  const [loginOpen, setLoginOpen] = useState(false);
+
   return (
     <Box minHeight={"100vh"} display="flex" flexDirection={"column"}>
       <Head>
@@ -65,34 +67,7 @@ const Home: NextPage = () => {
           if you would like to talk to an auth expert.
         </Typography>
       </Box>
-      <Box
-        padding={3}
-        display="flex"
-        alignItems={"center"}
-        justifyContent="space-between"
-        sx={{ backgroundColor: "white", zIndex: 2 }}
-      >
-        <Stack direction="row" gap={4}>
-          <Image src={"/logo.svg"} alt="logo" width={160} height={30} />
-          <Typography variant="h3">Socks</Typography>
-          <Typography variant="h3">Kids</Typography>
-          <Typography variant="h3">Gifts</Typography>
-          <Typography variant="h3">Featured</Typography>
-          <Typography variant="h3">Community</Typography>
-        </Stack>
-        <Stack gap={2} direction="row" alignItems={"center"}>
-          <Button onClick={() => setLoginOpen(true)}>
-            <Typography variant="h3">Log in</Typography>
-          </Button>
-          <Box sx={{ borderLeft: "2px solid #5C727D" }} height="27px" />
-          <SearchOutlinedIcon sx={{ fontSize: 32, color: "#000" }} />
-          <Box sx={{ borderLeft: "2px solid #5C727D" }} height="27px" />
-          <FavoriteBorderOutlinedIcon sx={{ fontSize: 32, color: "#000" }} />
-          <Box sx={{ borderLeft: "2px solid #5C727D" }} height="27px" />
-          <ShoppingCartOutlinedIcon sx={{ fontSize: 32, color: "#000" }} />
-        </Stack>
-      </Box>
-
+      <Header onLogin={() => setLoginOpen(true)} />
       <Box
         sx={{
           width: "100%",
