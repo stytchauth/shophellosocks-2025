@@ -74,7 +74,7 @@ function LoginBackdrop({ open, onDismiss }: Props) {
           <Typography variant="h3">SIGN UP OR LOG IN</Typography>
           <Box width={"32px"}></Box>
         </Stack>
-        <Image src="/smile.png" alt="smile!" width={53} height={53} />
+        <Image src="/icon.png" alt="sock" width={37} height={47} />
         <Box paddingX={8} mt={3} sx={{ color: "black" }}>
           <StytchLogin config={sdkConfig} styles={sdkStyle} />
         </Box>

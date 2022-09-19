@@ -1,17 +1,31 @@
-import { Badge, Box, Button, Stack, Typography } from "@mui/material";
+import {
+  Badge,
+  Box,
+  Button,
+  Stack,
+  Typography,
+  useMediaQuery,
+  useTheme,
+  styled,
+} from "@mui/material";
 import React from "react";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import Image from "next/image";
 import { useStytch, useStytchUser } from "@stytch/nextjs";
+import AnimatedButton from "./AnimatedButton";
 
 type Props = {
   onLogin: () => void;
 };
+
 function Header({ onLogin }: Props) {
   const { user } = useStytchUser();
   const stytch = useStytch();
+  const theme = useTheme();
+  const showNav = useMediaQuery(theme.breakpoints.up("lg"));
+
   return (
     <Box
       paddingX={3}
@@ -21,23 +35,28 @@ function Header({ onLogin }: Props) {
       justifyContent="space-between"
       sx={{ backgroundColor: "white", zIndex: 2 }}
     >
-      <Stack direction="row" gap={4}>
+      <Box display="flex">
         <Image src={"/logo.svg"} alt="logo" width={160} height={30} />
-        <Typography variant="h3">Socks</Typography>
-        <Typography variant="h3">Kids</Typography>
-        <Typography variant="h3">Gifts</Typography>
-        <Typography variant="h3">Featured</Typography>
-        <Typography variant="h3">Community</Typography>
-      </Stack>
+        {showNav && (
+          <Stack direction="row" gap={4} ml={4}>
+            <Typography variant="h3">Socks</Typography>
+            <Typography variant="h3">Kids</Typography>
+            <Typography variant="h3">Gifts</Typography>
+            <Typography variant="h3">Featured</Typography>
+            <Typography variant="h3">Community</Typography>
+          </Stack>
+        )}
+      </Box>
+
       <Stack gap={2} direction="row" alignItems={"center"}>
         {user ? (
           <Button onClick={() => stytch.session.revoke()}>
             <Typography variant="h3">Log out</Typography>
           </Button>
         ) : (
-          <Button onClick={onLogin}>
+          <AnimatedButton onClick={onLogin}>
             <Typography variant="h3">Log in</Typography>
-          </Button>
+          </AnimatedButton>
         )}
 
         <Box sx={{ borderLeft: "2px solid #5C727D" }} height="27px" />
@@ -46,7 +65,7 @@ function Header({ onLogin }: Props) {
         <FavoriteBorderOutlinedIcon sx={{ fontSize: 32, color: "#000" }} />
         <Box sx={{ borderLeft: "2px solid #5C727D" }} height="27px" />
         {user ? (
-          <Button>
+          <AnimatedButton>
             <Badge
               overlap="circular"
               badgeContent={2}
@@ -58,7 +77,7 @@ function Header({ onLogin }: Props) {
             >
               <ShoppingCartOutlinedIcon sx={{ fontSize: 32, color: "#000" }} />
             </Badge>
-          </Button>
+          </AnimatedButton>
         ) : (
           <Button>
             <ShoppingCartOutlinedIcon sx={{ fontSize: 32, color: "#000" }} />
