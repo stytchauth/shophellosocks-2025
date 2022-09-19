@@ -15,12 +15,14 @@ import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import Image from "next/image";
 import { useStytch, useStytchUser } from "@stytch/nextjs";
 import AnimatedButton from "./AnimatedButton";
+import SideNavCart from "./SideNavCart";
 
 type Props = {
   onLogin: () => void;
+  onCartClick: () => void;
 };
 
-function Header({ onLogin }: Props) {
+function Header({ onCartClick, onLogin }: Props) {
   const { user } = useStytchUser();
   const stytch = useStytch();
   const theme = useTheme();
@@ -33,7 +35,14 @@ function Header({ onLogin }: Props) {
       display="flex"
       alignItems={"center"}
       justifyContent="space-between"
-      sx={{ backgroundColor: "white", zIndex: 2 }}
+      sx={{
+        backgroundColor: "white",
+        zIndex: 2,
+        borderBottom: "2px solid #000000",
+      }}
+      position="sticky"
+      top={0}
+      zIndex={5}
     >
       <Box display="flex">
         <Image src={"/logo.svg"} alt="logo" width={160} height={30} />
@@ -65,7 +74,7 @@ function Header({ onLogin }: Props) {
         <FavoriteBorderOutlinedIcon sx={{ fontSize: 32, color: "#000" }} />
         <Box sx={{ borderLeft: "2px solid #5C727D" }} height="27px" />
         {user ? (
-          <AnimatedButton>
+          <AnimatedButton onClick={onCartClick}>
             <Badge
               overlap="circular"
               badgeContent={2}

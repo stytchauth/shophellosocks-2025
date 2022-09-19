@@ -32,6 +32,11 @@ const theme = createTheme({
       lineHeight: "30px",
       fontWeight: 400,
     },
+    h5: {
+      fontSize: "14px",
+      lineHeight: "30px",
+      fontWeight: 300,
+    },
     caption: {
       fontSize: 16,
       lineHeight: "20px",
