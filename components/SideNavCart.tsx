@@ -1,17 +1,21 @@
 import { Box, Button, Stack, Typography, Slide } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import React from "react";
-import Image from "next/image";
+import React, { useState } from "react";
 import ProductEntry from "./ProductEntry";
-import { borderBottom } from "@mui/system";
 
 type Props = {
   onDismiss: () => void;
 };
 
 function SideNavCart({ onDismiss }: Props) {
+  const [open, setOpen] = useState(false);
+
+  setTimeout(() => {
+    setOpen(true);
+  }, 1500);
+
   return (
-    <Slide in direction="left">
+    <Slide in={open} direction="left">
       <Box
         sx={{
           position: "fixed",
@@ -21,7 +25,7 @@ function SideNavCart({ onDismiss }: Props) {
           borderLeft: "2px solid #000000",
           zIndex: 10,
           right: 0,
-          top: 76,
+          top: 74,
           maxWidth: "475px",
           width: "100%",
         }}

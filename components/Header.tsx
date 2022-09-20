@@ -59,9 +59,9 @@ function Header({ onCartClick, onLogin }: Props) {
 
       <Stack gap={2} direction="row" alignItems={"center"}>
         {user ? (
-          <Button onClick={() => stytch.session.revoke()}>
+          <AnimatedButton onClick={() => stytch.session.revoke()}>
             <Typography variant="h3">Log out</Typography>
-          </Button>
+          </AnimatedButton>
         ) : (
           <AnimatedButton onClick={onLogin}>
             <Typography variant="h3">Log in</Typography>
@@ -74,19 +74,17 @@ function Header({ onCartClick, onLogin }: Props) {
         <FavoriteBorderOutlinedIcon sx={{ fontSize: 32, color: "#000" }} />
         <Box sx={{ borderLeft: "2px solid #5C727D" }} height="27px" />
         {user ? (
-          <AnimatedButton onClick={onCartClick}>
-            <Badge
-              overlap="circular"
-              badgeContent={2}
-              color="error"
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "right",
-              }}
-            >
-              <ShoppingCartOutlinedIcon sx={{ fontSize: 32, color: "#000" }} />
-            </Badge>
-          </AnimatedButton>
+          <Badge
+            overlap="circular"
+            badgeContent={2}
+            color="error"
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "right",
+            }}
+          >
+            <ShoppingCartOutlinedIcon sx={{ fontSize: 32, color: "#000" }} />
+          </Badge>
         ) : (
           <Button>
             <ShoppingCartOutlinedIcon sx={{ fontSize: 32, color: "#000" }} />

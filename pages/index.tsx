@@ -7,10 +7,14 @@ import LoginBackdrop from "../components/LoginBackdrop";
 import { useState } from "react";
 import Header from "../components/Header";
 import SideNavCart from "../components/SideNavCart";
+import Fade from "@mui/material/Fade";
+import { useStytchUser } from "@stytch/nextjs";
+import StytchMessage from "../components/StytchMessage";
 
 const Home: NextPage = () => {
   const [loginOpen, setLoginOpen] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
+  const { user } = useStytchUser();
 
   return (
     <Box minHeight={"100vh"} display="flex" flexDirection={"column"}>
@@ -22,6 +26,79 @@ const Home: NextPage = () => {
         />
       </Head>
       <LoginBackdrop open={loginOpen} onDismiss={() => setLoginOpen(false)} />
+      {!user && (
+        <StytchMessage delay={1500} top={100} right="5%">
+          <>
+            <Typography mb={2} variant="body2">
+              Hello socks is a demo application created by Stytch, demonstrating{" "}
+              <Link
+                color="inherit"
+                sx={{ fontWeight: 500 }}
+                href="https://stytch.com/products/email-magic-links"
+                target="_blank"
+              >
+                Email Magic Links
+              </Link>
+              ,{" "}
+              <Link
+                color="inherit"
+                sx={{ fontWeight: 500 }}
+                target="_blank"
+                href="https://stytch.com/products/oauth"
+              >
+                OAuth
+              </Link>
+              , and{" "}
+              <Link
+                color="inherit"
+                sx={{ fontWeight: 500 }}
+                target="_blank"
+                href="https://stytch.com/products/magic-links"
+              >
+                Embeddable Magic Links
+              </Link>
+              .
+            </Typography>
+            <Typography variant="body2">
+              {`Click the "Log in" button to see these in action.`}
+            </Typography>
+          </>
+        </StytchMessage>
+      )}
+      {user && (
+        <StytchMessage delay={2750} left={"1%"} top={100}>
+          <>
+            <Typography mb={2} variant="body2">
+              Improve conversions up to 300%. By embedding tokens into your
+              email, SMS, or other marketing campaign CTAs, users can jump back
+              into your platform without having to re-authenticate. Learn more
+              about{" "}
+              <Link
+                color="inherit"
+                sx={{ fontWeight: 500 }}
+                target="_blank"
+                href="https://stytch.com/products/magic-links"
+              >
+                Embeddable Magic Links
+              </Link>
+              .
+            </Typography>
+            <Typography variant="body2">
+              {`Click the “Log out” button to see this in action. You'll receive an embeddable magic link at `}
+              <Typography
+                component={"span"}
+                variant="body2"
+                sx={{ fontWeight: 500 }}
+              >
+                {`${user.emails[0].email}`}
+              </Typography>
+              <Typography component={"span"} variant="body2">
+                .
+              </Typography>
+            </Typography>
+          </>
+        </StytchMessage>
+      )}
 
       {/* <Box
         sx={{
@@ -72,7 +149,8 @@ const Home: NextPage = () => {
           position: "relative",
         }}
       >
-        {cartOpen && <SideNavCart onDismiss={() => setCartOpen(false)} />}
+        {user && <SideNavCart onDismiss={() => setCartOpen(false)} />}
+
         <Box
           sx={{
             width: "100%",
