@@ -12,7 +12,7 @@ function SideNavCart({ onDismiss }: Props) {
 
   setTimeout(() => {
     setOpen(true);
-  }, 1500);
+  }, 750);
 
   return (
     <Slide in={open} direction="left">

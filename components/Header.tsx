@@ -18,11 +18,12 @@ import AnimatedButton from "./AnimatedButton";
 import SideNavCart from "./SideNavCart";
 
 type Props = {
-  onLogin: () => void;
-  onCartClick: () => void;
+  onLogin?: () => void;
+  onLogout?: () => void;
+  onCartClick?: () => void;
 };
 
-function Header({ onCartClick, onLogin }: Props) {
+function Header({ onCartClick, onLogin, onLogout }: Props) {
   const { user } = useStytchUser();
   const stytch = useStytch();
   const theme = useTheme();
@@ -59,7 +60,7 @@ function Header({ onCartClick, onLogin }: Props) {
 
       <Stack gap={2} direction="row" alignItems={"center"}>
         {user ? (
-          <AnimatedButton onClick={() => stytch.session.revoke()}>
+          <AnimatedButton onClick={onLogout}>
             <Typography variant="h3">Log out</Typography>
           </AnimatedButton>
         ) : (
