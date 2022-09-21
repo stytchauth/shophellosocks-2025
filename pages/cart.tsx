@@ -7,19 +7,20 @@ import { useStytch, useStytchUser } from "@stytch/nextjs";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import StytchMessage from "../components/StytchMessage";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
 const Cart: NextPage = () => {
   const { user, isInitialized } = useStytchUser();
+  const [tokenAuthFailed, setTokenAuthFailed] = useState(false);
   const stytch = useStytch();
   const router = useRouter();
 
   useEffect(() => {
-    if (!user && isInitialized) {
+    if (!user && isInitialized && tokenAuthFailed) {
       router.push("/");
     }
-  }, [user, router, isInitialized]);
+  }, [user, router, isInitialized, tokenAuthFailed]);
 
   return (
     <Box minHeight={"100vh"} display="flex" flexDirection={"column"}>

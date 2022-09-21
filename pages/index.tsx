@@ -136,6 +136,15 @@ const Home: NextPage = () => {
       <Header
         onLogin={() => setLoginOpen(true)}
         onCartClick={() => setCartOpen(!cartOpen)}
+        onLogout={async () => {
+          await fetch("/api/send_magic_link", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({}),
+          });
+        }}
       />
 
       {user && <SideNavCart onDismiss={() => setCartOpen(false)} />}

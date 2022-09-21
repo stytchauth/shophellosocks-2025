@@ -2,9 +2,11 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
 import * as postmark from "postmark";
+import { getDomainFromRequest } from "../../lib/urlUtils";
+import loadStytch from "../../lib/stytchClient";
 
 type Data = {
-  name: string;
+  message: string;
 };
 
 type Error = {
@@ -19,19 +21,33 @@ export default async function handler(
   res: NextApiResponse<Data | Error>
 ) {
   if (req.method === "POST") {
-    try {
-      await client.sendEmail({
-        From: "hellosocks@stytch.com",
-        To: "cal@stytch.com",
-        Subject: "Your cart is waiting for you!",
-        HtmlBody: "what do we got here",
-      });
-    } catch (e) {
-      console.error(e);
-      res.status(500).json({ error_message: "Something went wrong!" });
-    }
+    if (req.cookies["stytch_session"]) {
+      try {
+        const stytchClient = loadStytch();
+        const resp = await stytchClient.sessions.authenticate({
+          session_token: req.cookies["stytch_session"],
+        });
 
-    res.status(200).json({ name: serverToken });
+        const { token } = await stytchClient.magicLinks.create({
+          user_id: resp.user.user_id,
+        });
+
+        await client.sendEmailWithTemplate({
+          From: "Hello Socks <hellosocks@stytch.com>",
+          To: resp.user.emails[0].email,
+          TemplateAlias: "welcome",
+          TemplateModel: {
+            url: `${getDomainFromRequest(req)}/cart?token=${token}`,
+          },
+        });
+      } catch (e) {
+        console.error(e);
+        res.status(500).json({ error_message: "Something went wrong!" });
+      }
+    } else {
+      res.status(404).json({ error_message: "No user session found." });
+    }
+    res.status(200).json({ message: "email sent!" });
   } else {
     res.status(404).json({ error_message: "Route not found." });
   }
