@@ -7,10 +7,20 @@ import { useStytch, useStytchUser } from "@stytch/nextjs";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import StytchMessage from "../components/StytchMessage";
+import { useEffect } from "react";
+import { useRouter } from "next/router";
 
 const Cart: NextPage = () => {
-  const { user } = useStytchUser();
+  const { user, isInitialized } = useStytchUser();
   const stytch = useStytch();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!user && isInitialized) {
+      router.push("/");
+    }
+  }, [user, router, isInitialized]);
+
   return (
     <Box minHeight={"100vh"} display="flex" flexDirection={"column"}>
       <StytchMessage delay={1500} bottom={"1%"} left={"1%"}>
@@ -85,7 +95,9 @@ const Cart: NextPage = () => {
 
             <Box display={"flex"} alignItems="center" mb={1}>
               <Box sx={{ width: "32px" }} />
-              <Typography ml={1}>Email: calvin</Typography>
+              <Typography
+                ml={1}
+              >{`Email: ${user?.emails[0].email}`}</Typography>
             </Box>
           </Box>
           <Box
