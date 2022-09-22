@@ -33,7 +33,7 @@ export default async function handler(
         });
 
         await client.sendEmailWithTemplate({
-          From: "Hello Socks <hellosocks@stytch.com>",
+          From: "Hello Socks <notifications@shophellosocks.com>",
           To: resp.user.emails[0].email,
           TemplateAlias: "welcome",
           TemplateModel: {
