@@ -37,6 +37,7 @@ function Header({
   const theme = useTheme();
   const showNav = useMediaQuery(theme.breakpoints.up("lg"));
 
+  const showNavButtons = useMediaQuery(theme.breakpoints.up("sm"));
   return (
     <Box
       paddingX={3}
@@ -72,7 +73,7 @@ function Header({
             disabled={disablePrimaryButton}
             onClick={useAuthedHeader ? onLogout : onLogin}
           >
-            <Typography variant="h3">
+            <Typography variant="h3" sx={{ whiteSpace: "nowrap" }}>
               {useAuthedHeader ? "Log out" : "Log in"}
             </Typography>
           </AnimatedButton>
@@ -88,10 +89,19 @@ function Header({
         )}
 
         <Box sx={{ borderLeft: "2px solid #5C727D" }} height="27px" />
-        <SearchOutlinedIcon sx={{ fontSize: 32, color: "#000" }} />
-        <Box sx={{ borderLeft: "2px solid #5C727D" }} height="27px" />
-        <FavoriteBorderOutlinedIcon sx={{ fontSize: 32, color: "#000" }} />
-        <Box sx={{ borderLeft: "2px solid #5C727D" }} height="27px" />
+        {showNavButtons && (
+          <>
+            <SearchOutlinedIcon sx={{ fontSize: 32, color: "#000" }} />
+            <Box sx={{ borderLeft: "2px solid #5C727D" }} height="27px" />
+          </>
+        )}
+        {showNavButtons && (
+          <>
+            <FavoriteBorderOutlinedIcon sx={{ fontSize: 32, color: "#000" }} />
+            <Box sx={{ borderLeft: "2px solid #5C727D" }} height="27px" />
+          </>
+        )}
+
         {useAuthedHeader ? (
           <Badge
             overlap="circular"
