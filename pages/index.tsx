@@ -4,20 +4,53 @@ import Head from "next/head";
 import Image from "next/image";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import LoginBackdrop from "../components/LoginBackdrop";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "../components/Header";
 import SideNavCart from "../components/SideNavCart";
 import Fade from "@mui/material/Fade";
-import { useStytchUser } from "@stytch/nextjs";
+import { useStytch, useStytchUser } from "@stytch/nextjs";
 import StytchMessage from "../components/StytchMessage";
 import SiteFooter from "../components/SiteFooter";
+
+enum DEMO_STATE {
+  INIT, // on page load. Unauthed.
+  LOGGED_IN, // after a successful login
+  LOG_OUT_IN_PROGRESS, // several steps here
+  LOGGED_OUT_SUCCESS,
+  LOGGED_OUT_ERROR,
+}
 
 const Home: NextPage = () => {
   const [loginOpen, setLoginOpen] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
   const { user } = useStytchUser();
+  const stytch = useStytch();
   // Post user intentionally logging out to trigger an embeddable magic link email
-  const [demoLogoutUX, showDemoLogoutUx] = useState(false);
+  const [demoState, setDemoState] = useState<DEMO_STATE>(DEMO_STATE.INIT);
+
+  const demoLogoutFunction = async () => {
+    setDemoState(DEMO_STATE.LOG_OUT_IN_PROGRESS);
+    const resp = await fetch("/api/send_magic_link", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    await stytch.session.revoke();
+    if (resp.status === 200) {
+      setDemoState(DEMO_STATE.LOGGED_OUT_SUCCESS);
+    } else {
+      setDemoState(DEMO_STATE.LOGGED_OUT_ERROR);
+    }
+  };
+
+  useEffect(() => {
+    if (demoState == DEMO_STATE.INIT && user)
+      setDemoState(DEMO_STATE.LOGGED_IN);
+    if (loginOpen && user) setLoginOpen(false);
+  }, [loginOpen, user, demoState]);
+
+  console.log(demoState);
 
   return (
     <Box minHeight={"100vh"} display="flex" flexDirection={"column"}>
@@ -29,7 +62,7 @@ const Home: NextPage = () => {
         />
       </Head>
       <LoginBackdrop open={loginOpen} onDismiss={() => setLoginOpen(false)} />
-      {!user && !demoLogoutUX && (
+      {demoState === DEMO_STATE.INIT && (
         <StytchMessage delay={1500} top={100} right="5%">
           <>
             <Typography mb={2} variant="body2">
@@ -68,7 +101,7 @@ const Home: NextPage = () => {
           </>
         </StytchMessage>
       )}
-      {user && (
+      {demoState === DEMO_STATE.LOGGED_IN && user && (
         <StytchMessage delay={1750} left={"1%"} top={100}>
           <>
             <Typography mb={2} variant="body2">
@@ -102,49 +135,37 @@ const Home: NextPage = () => {
           </>
         </StytchMessage>
       )}
-      {!user && demoLogoutUX && (
-        <StytchMessage delay={1750} left={"1%"} top={100}>
-          <>
-            <Typography mb={2} variant="body2">
-              You are logged out!!!
-              <Link
-                color="inherit"
-                sx={{ fontWeight: 500 }}
-                target="_blank"
-                href="https://stytch.com/products/magic-links"
-              >
-                Embeddable Magic Links
-              </Link>
-              .
-            </Typography>
-            <Typography variant="body2">
-              {`Click the “Log out” button to see this in action. You'll receive an embeddable magic link at `}
-              <Typography
-                component={"span"}
-                variant="body2"
-                sx={{ fontWeight: 500 }}
-              >
-                d
-              </Typography>
-              <Typography component={"span"} variant="body2">
-                .
-              </Typography>
-            </Typography>
-          </>
+      {demoState === DEMO_STATE.LOGGED_OUT_SUCCESS && (
+        <StytchMessage delay={0} left={"1%"} top={100}>
+          <Typography variant="body2">
+            You are logged out. Check your email inbox for the Embeddable Magic
+            Link.
+          </Typography>
+        </StytchMessage>
+      )}
+      {demoState === DEMO_STATE.LOGGED_OUT_ERROR && (
+        <StytchMessage delay={0} left={"1%"} top={100}>
+          <Typography variant="body2">
+            {`Sorry, something went wrong! Press "Log in" to try the demo again.`}
+          </Typography>
         </StytchMessage>
       )}
       <Header
         onLogin={() => setLoginOpen(true)}
         onCartClick={() => setCartOpen(!cartOpen)}
-        onLogout={async () => {
-          await fetch("/api/send_magic_link", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({}),
-          });
-        }}
+        onLogout={demoLogoutFunction}
+        animatePrimaryButton={
+          demoState === DEMO_STATE.INIT ||
+          demoState === DEMO_STATE.LOGGED_IN ||
+          demoState === DEMO_STATE.LOGGED_OUT_ERROR
+        }
+        disablePrimaryButton={demoState === DEMO_STATE.LOG_OUT_IN_PROGRESS}
+        useAuthedHeader={
+          !!user &&
+          demoState !== DEMO_STATE.LOG_OUT_IN_PROGRESS &&
+          demoState !== DEMO_STATE.LOGGED_OUT_SUCCESS &&
+          demoState !== DEMO_STATE.LOGGED_OUT_ERROR
+        }
       />
 
       {user && <SideNavCart onDismiss={() => setCartOpen(false)} />}

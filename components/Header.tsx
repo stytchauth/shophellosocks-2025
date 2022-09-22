@@ -21,11 +21,19 @@ type Props = {
   onLogin?: () => void;
   onLogout?: () => void;
   onCartClick?: () => void;
+  disablePrimaryButton?: boolean;
+  useAuthedHeader: boolean;
+  animatePrimaryButton?: boolean;
 };
 
-function Header({ onCartClick, onLogin, onLogout }: Props) {
-  const { user } = useStytchUser();
-  const stytch = useStytch();
+function Header({
+  animatePrimaryButton,
+  useAuthedHeader,
+  onCartClick,
+  onLogin,
+  onLogout,
+  disablePrimaryButton,
+}: Props) {
   const theme = useTheme();
   const showNav = useMediaQuery(theme.breakpoints.up("lg"));
 
@@ -59,14 +67,24 @@ function Header({ onCartClick, onLogin, onLogout }: Props) {
       </Box>
 
       <Stack gap={2} direction="row" alignItems={"center"}>
-        {user ? (
-          <AnimatedButton onClick={onLogout}>
-            <Typography variant="h3">Log out</Typography>
+        {animatePrimaryButton ? (
+          <AnimatedButton
+            disabled={disablePrimaryButton}
+            onClick={useAuthedHeader ? onLogout : onLogin}
+          >
+            <Typography variant="h3">
+              {useAuthedHeader ? "Log out" : "Log in"}
+            </Typography>
           </AnimatedButton>
         ) : (
-          <AnimatedButton onClick={onLogin}>
-            <Typography variant="h3">Log in</Typography>
-          </AnimatedButton>
+          <Button
+            disabled={disablePrimaryButton}
+            onClick={useAuthedHeader ? onLogout : onLogin}
+          >
+            <Typography variant="h3">
+              {useAuthedHeader ? "Log out" : "Log in"}
+            </Typography>
+          </Button>
         )}
 
         <Box sx={{ borderLeft: "2px solid #5C727D" }} height="27px" />
@@ -74,7 +92,7 @@ function Header({ onCartClick, onLogin, onLogout }: Props) {
         <Box sx={{ borderLeft: "2px solid #5C727D" }} height="27px" />
         <FavoriteBorderOutlinedIcon sx={{ fontSize: 32, color: "#000" }} />
         <Box sx={{ borderLeft: "2px solid #5C727D" }} height="27px" />
-        {user ? (
+        {useAuthedHeader ? (
           <Badge
             overlap="circular"
             badgeContent={2}
