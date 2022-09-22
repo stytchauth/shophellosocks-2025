@@ -120,8 +120,8 @@ const Cart: NextPage = () => {
           onCartClick={() => {}}
           onLogin={() => {}}
           onLogout={async () => {
+            await stytch.session.revoke();
             router.push("/");
-            stytch.session.revoke();
           }}
           useAuthedHeader={true}
         />

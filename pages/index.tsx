@@ -8,9 +8,10 @@ import { useEffect, useState } from "react";
 import Header from "../components/Header";
 import SideNavCart from "../components/SideNavCart";
 import Fade from "@mui/material/Fade";
-import { useStytch, useStytchUser } from "@stytch/nextjs";
+import { useStytch, useStytchSession, useStytchUser } from "@stytch/nextjs";
 import StytchMessage from "../components/StytchMessage";
 import SiteFooter from "../components/SiteFooter";
+import { useRouter } from "next/router";
 
 enum DEMO_STATE {
   INIT, // on page load. Unauthed.
@@ -18,6 +19,7 @@ enum DEMO_STATE {
   LOG_OUT_IN_PROGRESS, // several steps here
   LOGGED_OUT_SUCCESS,
   LOGGED_OUT_ERROR,
+  POST_MAGIC_LINK,
 }
 
 const Home: NextPage = () => {
@@ -25,6 +27,8 @@ const Home: NextPage = () => {
   const [cartOpen, setCartOpen] = useState(false);
   const { user } = useStytchUser();
   const stytch = useStytch();
+  const { session } = useStytchSession();
+  const router = useRouter();
   // Post user intentionally logging out to trigger an embeddable magic link email
   const [demoState, setDemoState] = useState<DEMO_STATE>(DEMO_STATE.INIT);
 
@@ -50,7 +54,18 @@ const Home: NextPage = () => {
     if (loginOpen && user) setLoginOpen(false);
   }, [loginOpen, user, demoState]);
 
-  console.log(demoState);
+  useEffect(() => {
+    if (
+      session?.authentication_factors[0].delivery_method === "embedded" &&
+      demoState === DEMO_STATE.LOGGED_OUT_SUCCESS
+    ) {
+      setDemoState(DEMO_STATE.POST_MAGIC_LINK);
+    }
+
+    if (!user && demoState === DEMO_STATE.POST_MAGIC_LINK) {
+      setDemoState(DEMO_STATE.INIT);
+    }
+  }, [session, router, demoState, user]);
 
   return (
     <Box minHeight={"100vh"} display="flex" flexDirection={"column"}>
@@ -168,7 +183,10 @@ const Home: NextPage = () => {
         }
       />
 
-      {user && <SideNavCart onDismiss={() => setCartOpen(false)} />}
+      {(demoState === DEMO_STATE.LOGGED_IN ||
+        demoState === DEMO_STATE.POST_MAGIC_LINK) && (
+        <SideNavCart onDismiss={() => setCartOpen(false)} />
+      )}
 
       <Box
         sx={{
