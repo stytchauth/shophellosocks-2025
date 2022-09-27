@@ -229,6 +229,7 @@ const Home: NextPage = () => {
               paddingY={1}
               paddingX={2}
               width="fit-content"
+              mt={2}
             >
               <Typography
                 sx={{ fontSize: 18, lineHeight: "31.5px", fontWeight: 600 }}
