@@ -72,7 +72,7 @@ function LoginBackdrop({ open, onDismiss }: Props) {
           </Button>
 
           <Typography variant="h3">SIGN UP OR LOG IN</Typography>
-          <Box width={"32px"}></Box>
+          <Box width={"44px"}></Box>
         </Stack>
         <Image src="/icon.png" alt="sock" width={37} height={47} />
         <Box paddingX={8} mt={3} sx={{ color: "black" }}>

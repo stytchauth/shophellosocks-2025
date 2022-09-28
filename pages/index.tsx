@@ -175,9 +175,10 @@ const Home: NextPage = () => {
         onCartClick={() => setCartOpen(!cartOpen)}
         onLogout={demoLogoutFunction}
         animatePrimaryButton={
-          demoState === DEMO_STATE.INIT ||
-          demoState === DEMO_STATE.LOGGED_IN ||
-          demoState === DEMO_STATE.LOGGED_OUT_ERROR
+          (demoState === DEMO_STATE.INIT ||
+            demoState === DEMO_STATE.LOGGED_IN ||
+            demoState === DEMO_STATE.LOGGED_OUT_ERROR) &&
+          !loginOpen
         }
         disablePrimaryButton={demoState === DEMO_STATE.LOG_OUT_IN_PROGRESS}
         useAuthedHeader={
