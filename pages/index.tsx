@@ -158,8 +158,8 @@ const Home: NextPage = () => {
       {demoState === DEMO_STATE.LOGGED_OUT_SUCCESS && (
         <StytchMessage delay={0} location="top-l">
           <Typography variant="body2">
-            You are logged out. Check your email inbox for the Embeddable Magic
-            Link.
+            You are logged out. Check your email inbox for the embeddable magic
+            link.
           </Typography>
         </StytchMessage>
       )}

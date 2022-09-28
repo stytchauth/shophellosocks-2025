@@ -94,7 +94,7 @@ const Cart: NextPage = () => {
                 color="inherit"
                 sx={{ fontWeight: 500 }}
                 target="_blank"
-                href="https://stytch.com/docs/magic-links"
+                href="https://stytch.com/docs/magic-links#embeddable-magic-links"
               >
                 docs
               </Link>
@@ -108,7 +108,7 @@ const Cart: NextPage = () => {
               >
                 Contact us
               </Link>{" "}
-              if you would like to talk to an auth export, or learn more about{" "}
+              if you would like to talk to an auth expert, or learn more about{" "}
               <Link
                 color="inherit"
                 sx={{ fontWeight: 500 }}

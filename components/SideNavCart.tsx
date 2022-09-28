@@ -15,7 +15,7 @@ function SideNavCart({ onDismiss }: Props) {
   }, 750);
 
   return (
-    <Slide in={open} direction="left">
+    <Slide in={open} direction="left" timeout={{ enter: 1200 }}>
       <Box
         sx={{
           position: "fixed",
