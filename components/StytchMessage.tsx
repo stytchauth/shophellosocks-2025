@@ -22,12 +22,13 @@ function StytchMessage({ delay, location, children }: Props) {
         position: "fixed",
         zIndex: 100,
         top: ["top-r", "top-l"].includes(location) ? 100 : undefined,
-        bottom: ["btm-r", "btm-l"].includes(location) ? 100 : undefined,
+        bottom: ["btm-r", "btm-l"].includes(location) ? 0 : undefined,
       }}
       justifyContent={
         ["top-r", "bottom-r"].includes(location) ? "flex-end" : "flex-start"
       }
-      paddingX={4}
+      paddingX={["top-r", "top-l"].includes(location) ? 4 : 2}
+      paddingY={["top-r", "top-l"].includes(location) ? 0 : 2}
     >
       <Fade in={open}>
         <Box
