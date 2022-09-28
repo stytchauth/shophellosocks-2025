@@ -35,7 +35,7 @@ export default async function handler(
         await client.sendEmailWithTemplate({
           From: "Hello Socks <notifications@shophellosocks.com>",
           To: resp.user.emails[0].email,
-          TemplateAlias: "welcome",
+          TemplateAlias: "v2",
           TemplateModel: {
             url: `${getDomainFromRequest(req)}/cart?token=${token}`,
           },
