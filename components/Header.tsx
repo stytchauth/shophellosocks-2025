@@ -50,9 +50,10 @@ function Header({
         zIndex: 2,
         borderBottom: "2px solid #000000",
       }}
-      position="sticky"
+      position="fixed"
       top={0}
       zIndex={5}
+      width="100%"
     >
       <Box display="flex">
         <Image src={"/logo.svg"} alt="logo" width={160} height={30} />

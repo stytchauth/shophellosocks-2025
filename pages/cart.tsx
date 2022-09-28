@@ -71,8 +71,13 @@ const Cart: NextPage = () => {
     );
   else
     return (
-      <Box minHeight={"100vh"} display="flex" flexDirection={"column"}>
-        <StytchMessage delay={1500} bottom={"1%"} left={"1%"}>
+      <Box
+        minHeight={"100vh"}
+        display="flex"
+        flexDirection={"column"}
+        paddingTop={"76px"}
+      >
+        <StytchMessage delay={1500} location="btm-l">
           <>
             <Typography mb={2} variant="body2">
               You are now logged back in via an{" "}

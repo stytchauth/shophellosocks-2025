@@ -68,7 +68,12 @@ const Home: NextPage = () => {
   }, [session, router, demoState, user]);
 
   return (
-    <Box minHeight={"100vh"} display="flex" flexDirection={"column"}>
+    <Box
+      minHeight={"100vh"}
+      display="flex"
+      flexDirection={"column"}
+      paddingTop={"76px"}
+    >
       <Head>
         <title>Hello Socks</title>
         <meta
@@ -78,10 +83,10 @@ const Home: NextPage = () => {
       </Head>
       <LoginBackdrop open={loginOpen} onDismiss={() => setLoginOpen(false)} />
       {demoState === DEMO_STATE.INIT && (
-        <StytchMessage delay={1500} top={100} right="5%">
+        <StytchMessage delay={1500} location="top-r">
           <>
             <Typography mb={2} variant="body2">
-              Hello socks is a demo application created by Stytch, demonstrating{" "}
+              Hello Socks is a demo application created by Stytch, demonstrating{" "}
               <Link
                 color="inherit"
                 sx={{ fontWeight: 500 }}
@@ -117,7 +122,7 @@ const Home: NextPage = () => {
         </StytchMessage>
       )}
       {demoState === DEMO_STATE.LOGGED_IN && user && (
-        <StytchMessage delay={1750} left={"1%"} top={100}>
+        <StytchMessage delay={1750} location="top-l">
           <>
             <Typography mb={2} variant="body2">
               Improve conversions up to 300%. By embedding tokens into your
@@ -151,7 +156,7 @@ const Home: NextPage = () => {
         </StytchMessage>
       )}
       {demoState === DEMO_STATE.LOGGED_OUT_SUCCESS && (
-        <StytchMessage delay={0} left={"1%"} top={100}>
+        <StytchMessage delay={0} location="top-l">
           <Typography variant="body2">
             You are logged out. Check your email inbox for the Embeddable Magic
             Link.
@@ -159,7 +164,7 @@ const Home: NextPage = () => {
         </StytchMessage>
       )}
       {demoState === DEMO_STATE.LOGGED_OUT_ERROR && (
-        <StytchMessage delay={0} left={"1%"} top={100}>
+        <StytchMessage delay={0} location="top-l">
           <Typography variant="body2">
             {`Sorry, something went wrong! Press "Log in" to try the demo again.`}
           </Typography>
