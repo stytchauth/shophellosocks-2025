@@ -1,10 +1,10 @@
 import { Box, Fade, Link, Typography } from "@mui/material";
-import React, { useState } from "react";
+import { useState } from "react";
 
 type Props = {
   delay: number;
   location: "top-l" | "top-r" | "btm-l" | "btm-r";
-  children: JSX.Element;
+  children: React.ReactNode;
 };
 
 function StytchMessage({ delay, location, children }: Props) {
