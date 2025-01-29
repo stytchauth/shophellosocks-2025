@@ -20,8 +20,9 @@ type Props = {
 
 const sdkStyle: StyleConfig = {
   fontFamily: '"Helvetica New", Helvetica, sans-serif',
-  primaryColor: "#000000",
-
+  colors: {
+    primary: "#000000"
+  },
   hideHeaderText: true,
 };
 
