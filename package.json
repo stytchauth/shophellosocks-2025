@@ -9,25 +9,25 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@emotion/react": "^11.10.4",
-    "@emotion/styled": "^11.10.4",
-    "@mui/icons-material": "^5.10.3",
-    "@mui/material": "^5.10.5",
-    "@stytch/nextjs": "^0.4.2",
-    "@stytch/react": "^0.3.0",
-    "@stytch/vanilla-js": "^0.3.4",
-    "next": "12.3.0",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@mui/icons-material": "^6.4.2",
+    "@mui/material": "^6.4.2",
+    "@stytch/nextjs": "^21.2.0",
+    "@stytch/react": "^19.2.0",
+    "@stytch/vanilla-js": "^5.13.0",
+    "next": "15.1.6",
     "postmark": "^3.0.14",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "stytch": "^5.5.0"
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
+    "stytch": "^12.3.1"
   },
   "devDependencies": {
-    "@types/node": "18.7.17",
-    "@types/react": "18.0.19",
-    "@types/react-dom": "18.0.6",
-    "eslint": "8.23.1",
-    "eslint-config-next": "12.3.0",
-    "typescript": "4.8.3"
+    "@types/node": "22.12.0",
+    "@types/react": "19.0.8",
+    "@types/react-dom": "19.0.3",
+    "eslint": "9.19.0",
+    "eslint-config-next": "15.1.6",
+    "typescript": "5.7.3"
   }
 }

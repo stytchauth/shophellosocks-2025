@@ -52,8 +52,8 @@ function ProductEntry({ image, name, color }: Props) {
             <Image
               src="/quantity.svg"
               alt="counter"
-              height={"37px"}
-              width={"115px"}
+              height={37}
+              width={115}
             />
             <Typography variant="h5" sx={{ color: "#ADBCC5" }} textAlign="end">
               REMOVE
