@@ -1,14 +1,20 @@
 import { Box, Link, Stack, Typography } from "@mui/material";
-import { NextPage } from "next";
+import { NextPage, GetServerSideProps } from "next";
 import Header from "../components/Header";
 import SiteFooter from "../components/SiteFooter";
 import ProductEntry from "../components/ProductEntry";
-import { useStytch, useStytchUser } from "@stytch/nextjs";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import { useRouter } from "next/router";
+import { withAuth, AuthenticatedPageProps } from "../lib/ssrAuth";
 
-const Cart: NextPage = () => {
+interface CartProps extends AuthenticatedPageProps {}
+
+const Cart: NextPage<CartProps> = ({ user }) => {
+  const handleLogout = () => {
+    // Navigate to logout endpoint which will handle session revocation and redirect
+    window.location.href = "/api/logout";
+  };
+
   return (
     <Box
       minHeight={"100vh"}
@@ -19,10 +25,7 @@ const Cart: NextPage = () => {
       <Header
         onCartClick={() => {}}
         onLogin={() => {}}
-        // onLogout={async () => {
-        //   await stytch.session.revoke();
-        //   router.push("/");
-
+        onLogout={handleLogout}
         useAuthedHeader={true}
       />
       <Box
@@ -50,8 +53,7 @@ const Cart: NextPage = () => {
               <Box sx={{ width: "32px" }} />
               <Typography
                 ml={1}
-
-              >{`Email: TODO`}</Typography>
+              >{`Email: ${user.emails?.[0]?.email || 'N/A'}`}</Typography>
             </Box>
           </Box>
           <Box
@@ -161,5 +163,7 @@ const Cart: NextPage = () => {
     </Box>
   );
 };
+
+export const getServerSideProps: GetServerSideProps<CartProps> = withAuth({ requireTwoFactor: true });
 
 export default Cart;

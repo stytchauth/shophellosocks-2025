@@ -6,6 +6,7 @@ import { setSessionCookie } from "../../lib/sessionUtils";
 type Data = {
   message: string;
   user?: any;
+  redirect?: string;
 };
 
 type Error = {
@@ -52,10 +53,14 @@ export default async function handler(
     // Set session cookie using shared utility
     setSessionCookie(res, authResponse.session_token);
 
-    // Return JSON response
+    // Check if user has a phone number for 2FA
+    const hasPhoneNumber = authResponse.user.phone_numbers && authResponse.user.phone_numbers.length > 0;
+
+    // Return JSON response with redirect information
     res.status(200).json({
       message: "OTP verified successfully",
-      user: authResponse.user
+      user: authResponse.user,
+      redirect: hasPhoneNumber ? '/2fa' : '/enroll'
     });
 
   } catch (error: any) {

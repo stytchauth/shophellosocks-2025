@@ -3,7 +3,7 @@ import React, { useState } from "react";
 
 type Props = {
   onComplete: (code: string) => void;
-  onBack: () => void;
+  onBack?: () => void;
   error?: string;
 };
 
@@ -22,7 +22,7 @@ function OtpInput({ onComplete, onBack, error }: Props) {
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Escape") {
+    if (e.key === "Escape" && onBack) {
       onBack();
     }
   };

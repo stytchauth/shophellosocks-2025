@@ -79,8 +79,8 @@ function LoginForm() {
       const data = await response.json();
 
       if (response.ok) {
-        // Redirect to enroll page on success
-        window.location.href = "/enroll";
+        // Use redirect URL from response, defaulting to /enroll
+        window.location.href = data.redirect || "/enroll";
       } else {
         setOtpError(data.error_message || "Failed to verify OTP");
       }

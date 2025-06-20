@@ -43,8 +43,15 @@ export default async function handler(
     // Set session cookie and clear code verifier using shared utility
     setSessionCookie(res, authResponse.session_token, true);
 
-    // Redirect to enroll page
-    redirectAfterAuth(res, '/enroll');
+    // Check if user has a phone number for 2FA
+    const hasPhoneNumber = authResponse.user.phone_numbers && authResponse.user.phone_numbers.length > 0;
+    
+    // Redirect based on phone number status
+    if (hasPhoneNumber) {
+      redirectAfterAuth(res, '/2fa');
+    } else {
+      redirectAfterAuth(res, '/enroll');
+    }
 
   } catch (error) {
     console.error('OAuth callback error:', error);

@@ -3,12 +3,12 @@ import type { NextPage, GetServerSideProps } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
-import SmsEnrollment from "../components/SmsEnrollment";
 import { withAuth, AuthenticatedPageProps } from "../lib/ssrAuth";
+import TwoFactorAuth from "../components/TwoFactorAuth";
 
-interface EnrollProps extends AuthenticatedPageProps {}
+interface TwoFactorAuthProps extends AuthenticatedPageProps {}
 
-const Enroll: NextPage<EnrollProps> = ({ user }) => {
+const TwoFactorAuthPage: NextPage<TwoFactorAuthProps> = ({ user }) => {
   return (
     <Box
       minHeight={"100vh"}
@@ -17,10 +17,10 @@ const Enroll: NextPage<EnrollProps> = ({ user }) => {
       sx={{ backgroundColor: "#FFD94A" }}
     >
       <Head>
-        <title>Enroll - Hello Socks</title>
+        <title>Two-Factor Authentication - Hello Socks</title>
         <meta
           name="description"
-          content="Enroll with Hello Socks"
+          content="Complete two-factor authentication"
         />
       </Head>
 
@@ -55,26 +55,13 @@ const Enroll: NextPage<EnrollProps> = ({ user }) => {
           sx={{
             height: 0,
             width: 0,
-            border: "5vw solid transparent",
-            borderTop: 0,
-            borderBottom: "8vw solid #C7F1FF",
-            transform: "rotate(-25deg)",
-            position: "absolute",
-            left: "12%",
-            top: "18%",
-          }}
-        />
-        <Box
-          sx={{
-            height: 0,
-            width: 0,
             border: "3vw solid transparent",
             borderTop: 0,
-            borderBottom: "6vw solid #FD4E43",
-            transform: "rotate(55deg)",
+            borderBottom: "5vw solid #C7F1FF",
+            transform: "rotate(45deg)",
             position: "absolute",
-            right: "18%",
-            top: "15%",
+            left: "8%",
+            top: "20%",
           }}
         />
         <Box
@@ -83,28 +70,41 @@ const Enroll: NextPage<EnrollProps> = ({ user }) => {
             width: 0,
             border: "4vw solid transparent",
             borderTop: 0,
-            borderBottom: "7vw solid #C7F1FF",
-            transform: "rotate(-10deg)",
+            borderBottom: "8vw solid #FD4E43",
+            transform: "rotate(-30deg)",
             position: "absolute",
-            left: "8%",
-            bottom: "30%",
+            right: "12%",
+            top: "15%",
           }}
         />
         <Box
           sx={{
             height: 0,
             width: 0,
-            border: "6vw solid transparent",
+            border: "2vw solid transparent",
             borderTop: 0,
-            borderBottom: "11vw solid #FD4E43",
-            transform: "rotate(35deg)",
+            borderBottom: "4vw solid #C7F1FF",
+            transform: "rotate(70deg)",
             position: "absolute",
-            right: "12%",
+            left: "18%",
+            bottom: "25%",
+          }}
+        />
+        <Box
+          sx={{
+            height: 0,
+            width: 0,
+            border: "5vw solid transparent",
+            borderTop: 0,
+            borderBottom: "9vw solid #FD4E43",
+            transform: "rotate(15deg)",
+            position: "absolute",
+            right: "6%",
             bottom: "20%",
           }}
         />
 
-        {/* Placeholder Content */}
+        {/* 2FA Content */}
         <Box
           sx={{
             backgroundColor: "white",
@@ -131,7 +131,7 @@ const Enroll: NextPage<EnrollProps> = ({ user }) => {
                 mb: 1
               }}
             >
-              Secure Your Account
+              Two-Factor Authentication
             </Typography>
             <Typography 
               variant="body1" 
@@ -142,17 +142,17 @@ const Enroll: NextPage<EnrollProps> = ({ user }) => {
                 mb: 3
               }}
             >
-              Add an extra layer of security with SMS two-factor authentication
+              We&apos;ll send a verification code to your registered phone number
             </Typography>
           </Box>
 
-          <SmsEnrollment />
+          <TwoFactorAuth user={user} />
         </Box>
       </Box>
     </Box>
   );
 };
 
-export const getServerSideProps: GetServerSideProps<EnrollProps> = withAuth();
+export const getServerSideProps: GetServerSideProps<TwoFactorAuthProps> = withAuth();
 
-export default Enroll;
+export default TwoFactorAuthPage;
