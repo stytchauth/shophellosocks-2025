@@ -1,19 +1,20 @@
-import { Box, Link, Stack, Typography } from "@mui/material";
-import { NextPage, GetServerSideProps } from "next";
-import Header from "../components/Header";
-import SiteFooter from "../components/SiteFooter";
-import ProductEntry from "../components/ProductEntry";
+import { Box, Stack, Typography } from "@mui/material";
+import { Metadata } from "next";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import { withAuth, AuthenticatedPageProps } from "../lib/ssrAuth";
+import { requireAuth } from "../../lib/auth-server";
+import ClientHeader from "../../components/ClientHeader";
+import SiteFooter from "../../components/SiteFooter";
+import ProductEntry from "../../components/ProductEntry";
 
-interface CartProps extends AuthenticatedPageProps {}
+export const metadata: Metadata = {
+  title: "Cart - Hello Socks",
+  description: "Your Hello Socks shopping cart",
+};
 
-const Cart: NextPage<CartProps> = ({ user }) => {
-  const handleLogout = () => {
-    // Navigate to logout endpoint which will handle session revocation and redirect
-    window.location.href = "/api/logout";
-  };
+export default async function Cart() {
+  // Require authentication with 2FA
+  const { user } = await requireAuth({ requireTwoFactor: true });
 
   return (
     <Box
@@ -22,12 +23,7 @@ const Cart: NextPage<CartProps> = ({ user }) => {
       flexDirection={"column"}
       paddingTop={"76px"}
     >
-      <Header
-        onCartClick={() => {}}
-        onLogin={() => {}}
-        onLogout={handleLogout}
-        useAuthedHeader={true}
-      />
+      <ClientHeader useAuthedHeader={true} />
       <Box
         display={"flex"}
         flexGrow={1}
@@ -162,8 +158,4 @@ const Cart: NextPage<CartProps> = ({ user }) => {
       <SiteFooter />
     </Box>
   );
-};
-
-export const getServerSideProps: GetServerSideProps<CartProps> = withAuth({ requireTwoFactor: true });
-
-export default Cart;
+}

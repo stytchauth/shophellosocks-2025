@@ -1,4 +1,5 @@
 import type { NextApiResponse } from "next";
+import { NextResponse } from "next/server";
 
 export interface SessionData {
   session_token: string;
@@ -9,10 +10,27 @@ export interface SessionData {
  * Sets a secure session cookie and clears any temporary cookies
  */
 export function setSessionCookie(
-  res: NextApiResponse,
+  res: NextApiResponse | NextResponse,
   sessionToken: string,
   clearCodeVerifier: boolean = false
 ) {
+  if (res instanceof NextResponse) {
+    // App Router response
+    res.cookies.set('stytch_session', sessionToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'strict',
+      path: '/',
+      maxAge: 86400 // 24 hours
+    });
+
+    if (clearCodeVerifier) {
+      res.cookies.delete('stytch_code_verifier');
+    }
+    return;
+  }
+
+  // Pages Router response
   const cookies: string[] = [];
 
   // Set session token cookie
@@ -47,7 +65,16 @@ export function setSessionCookie(
 /**
  * Clears session and temporary cookies
  */
-export function clearSessionCookies(res: NextApiResponse) {
+export function clearSessionCookies(res: NextApiResponse | NextResponse) {
+  if (res instanceof NextResponse) {
+    // App Router response
+    res.cookies.delete('stytch_session');
+    res.cookies.delete('stytch_code_verifier');
+    res.cookies.delete('stytch_method_id');
+    return;
+  }
+
+  // Pages Router response
   const cookies = [
     // Clear session cookie
     [

@@ -1,11 +1,6 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import type {NextApiRequest, NextApiResponse} from "next";
-import {getDomainFromRequest} from "../../lib/urlUtils";
+import { NextRequest, NextResponse } from "next/server";
+import { getDomainFromRequest } from "../../../lib/urlUtils";
 import crypto from "crypto";
-
-type Error = {
-  error_message: string;
-};
 
 // Generate PKCE code verifier and challenge
 function generatePKCE() {
@@ -18,40 +13,24 @@ function generatePKCE() {
     .update(codeVerifier)
     .digest('base64url');
 
-  return {codeVerifier, codeChallenge};
+  return { codeVerifier, codeChallenge };
 }
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<Error>
-) {
-  if (req.method !== "GET") {
-    return res.status(405).json({error_message: "Method not allowed"});
-  }
-
+export async function GET(request: NextRequest) {
   const publicToken = process.env.NEXT_PUBLIC_STYTCH_PUBLIC_TOKEN;
 
   if (!publicToken) {
-    return res.status(500).json({error_message: "Missing Stytch public token"});
+    return NextResponse.json(
+      { error_message: "Missing Stytch public token" },
+      { status: 500 }
+    );
   }
 
   // Generate PKCE parameters
-  const {codeVerifier, codeChallenge} = generatePKCE();
-
-  // Store code verifier in httpOnly cookie
-  const cookieOptions = [
-    `stytch_code_verifier=${codeVerifier}`,
-    'HttpOnly',
-    'Secure',
-    'SameSite=Strict',
-    'Path=/',
-    'Max-Age=600'
-  ].join('; ');
-
-  res.setHeader('Set-Cookie', cookieOptions);
+  const { codeVerifier, codeChallenge } = generatePKCE();
 
   // Get the current domain for redirect URL
-  const domain = getDomainFromRequest(req);
+  const domain = request.nextUrl.origin;
   const redirectUrl = `${domain}/api/oauth-callback`;
 
   // Construct Stytch OAuth start URL
@@ -62,7 +41,17 @@ export default async function handler(
   stytchOAuthUrl.searchParams.set('code_challenge', codeChallenge);
   stytchOAuthUrl.searchParams.set('code_challenge_method', 'S256');
 
-  // Return 302 redirect to Stytch
-  res.status(302).setHeader('Location', stytchOAuthUrl.toString());
-  res.end();
+  // Create redirect response
+  const response = NextResponse.redirect(stytchOAuthUrl.toString());
+  
+  // Store code verifier in httpOnly cookie
+  response.cookies.set('stytch_code_verifier', codeVerifier, {
+    httpOnly: true,
+    secure: true,
+    sameSite: 'strict',
+    path: '/',
+    maxAge: 600 // 10 minutes
+  });
+
+  return response;
 }

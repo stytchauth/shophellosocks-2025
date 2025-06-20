@@ -1,67 +1,12 @@
-import { Box, Button, Link, Stack, Typography } from "@mui/material";
-import type { NextPage } from "next";
-import Head from "next/head";
+import { Box, Stack, Typography } from "@mui/material";
 import Image from "next/image";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import { useEffect, useState } from "react";
-import Header from "../components/Header";
-import SideNavCart from "../components/SideNavCart";
-import Fade from "@mui/material/Fade";
-import { useStytch, useStytchSession, useStytchUser } from "@stytch/nextjs";
+import ClientHeader from "../components/ClientHeader";
 import SiteFooter from "../components/SiteFooter";
-import { useRouter } from "next/router";
+import { getAuthUser } from "../lib/auth-server";
 
-enum DEMO_STATE {
-  INIT, // on page load. Unauthed.
-  LOGGED_IN, // after a successful login
-  LOG_OUT_IN_PROGRESS, // several steps here
-  LOGGED_OUT_SUCCESS,
-  LOGGED_OUT_ERROR,
-  POST_MAGIC_LINK,
-}
-
-const Home: NextPage = () => {
-  const [cartOpen, setCartOpen] = useState(false);
-  const { user } = useStytchUser();
-  const stytch = useStytch();
-  const { session } = useStytchSession();
-  const router = useRouter();
-  // Post user intentionally logging out to trigger an embeddable magic link email
-  const [demoState, setDemoState] = useState<DEMO_STATE>(DEMO_STATE.INIT);
-
-  const demoLogoutFunction = async () => {
-    setDemoState(DEMO_STATE.LOG_OUT_IN_PROGRESS);
-    const resp = await fetch("/api/send_magic_link", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    await stytch.session.revoke();
-    if (resp.status === 200) {
-      setDemoState(DEMO_STATE.LOGGED_OUT_SUCCESS);
-    } else {
-      setDemoState(DEMO_STATE.LOGGED_OUT_ERROR);
-    }
-  };
-
-  useEffect(() => {
-    if (demoState == DEMO_STATE.INIT && user)
-      setDemoState(DEMO_STATE.LOGGED_IN);
-  }, [user, demoState]);
-
-  useEffect(() => {
-    if (
-      session?.authentication_factors[0].delivery_method === "embedded" &&
-      demoState === DEMO_STATE.LOGGED_OUT_SUCCESS
-    ) {
-      setDemoState(DEMO_STATE.POST_MAGIC_LINK);
-    }
-
-    if (!user && demoState === DEMO_STATE.POST_MAGIC_LINK) {
-      setDemoState(DEMO_STATE.INIT);
-    }
-  }, [session, router, demoState, user]);
+export default async function Home() {
+  const authResult = await getAuthUser();
 
   return (
     <Box
@@ -70,35 +15,7 @@ const Home: NextPage = () => {
       flexDirection={"column"}
       paddingTop={"76px"}
     >
-      <Head>
-        <title>Hello Socks</title>
-        <meta
-          name="description"
-          content="An ecommerce demo application powered by Stytch"
-        />
-      </Head>
-      
-      <Header
-        onCartClick={() => setCartOpen(!cartOpen)}
-        onLogout={demoLogoutFunction}
-        animatePrimaryButton={
-          (demoState === DEMO_STATE.INIT ||
-            demoState === DEMO_STATE.LOGGED_IN ||
-            demoState === DEMO_STATE.LOGGED_OUT_ERROR)
-        }
-        disablePrimaryButton={demoState === DEMO_STATE.LOG_OUT_IN_PROGRESS}
-        useAuthedHeader={
-          !!user &&
-          demoState !== DEMO_STATE.LOG_OUT_IN_PROGRESS &&
-          demoState !== DEMO_STATE.LOGGED_OUT_SUCCESS &&
-          demoState !== DEMO_STATE.LOGGED_OUT_ERROR
-        }
-      />
-
-      {(demoState === DEMO_STATE.LOGGED_IN ||
-        demoState === DEMO_STATE.POST_MAGIC_LINK) && (
-        <SideNavCart onDismiss={() => setCartOpen(false)} />
-      )}
+      <ClientHeader useAuthedHeader={!!authResult} />
 
       <Box
         sx={{
@@ -157,6 +74,8 @@ const Home: NextPage = () => {
             <Image src={"/orange.png"} alt="socks" width={515} height={434} />
           </Box>
         </Box>
+        
+        {/* Decorative triangles */}
         <Box
           sx={{
             height: 0,
@@ -223,6 +142,7 @@ const Home: NextPage = () => {
           }}
         />
       </Box>
+      
       <Box
         sx={{ backgroundColor: "white", zIndex: 1 }}
         paddingY={4}
@@ -257,6 +177,4 @@ const Home: NextPage = () => {
       <SiteFooter />
     </Box>
   );
-};
-
-export default Home;
+}

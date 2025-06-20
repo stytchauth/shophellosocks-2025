@@ -1,3 +1,5 @@
+"use client";
+
 import { Box, Button, Typography, TextField, Divider } from "@mui/material";
 import React, { useState } from "react";
 import OtpInput from "./OtpInput";

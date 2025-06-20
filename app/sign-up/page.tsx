@@ -1,11 +1,15 @@
 import { Box, Typography } from "@mui/material";
-import type { NextPage } from "next";
-import Head from "next/head";
+import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import LoginForm from "../components/LoginForm";
+import LoginForm from "../../components/LoginForm";
 
-const Login: NextPage = () => {
+export const metadata: Metadata = {
+  title: "Sign Up - Hello Socks",
+  description: "Create your Hello Socks account",
+};
+
+export default function SignUp() {
   return (
     <Box
       minHeight={"100vh"}
@@ -13,14 +17,6 @@ const Login: NextPage = () => {
       flexDirection={"column"}
       sx={{ backgroundColor: "#FFD94A" }}
     >
-      <Head>
-        <title>Login - Hello Socks</title>
-        <meta
-          name="description"
-          content="Log in to your Hello Socks account"
-        />
-      </Head>
-
       {/* Header */}
       <Box
         paddingX={3}
@@ -47,18 +43,31 @@ const Login: NextPage = () => {
         paddingY={4}
         sx={{ position: "relative", overflowX: "hidden" }}
       >
-        {/* Background decorative triangles */}
+        {/* Background decorative triangles - different positioning from login */}
+        <Box
+          sx={{
+            height: 0,
+            width: 0,
+            border: "6vw solid transparent",
+            borderTop: 0,
+            borderBottom: "9vw solid #C7F1FF",
+            transform: "rotate(-15deg)",
+            position: "absolute",
+            left: "5%",
+            top: "10%",
+          }}
+        />
         <Box
           sx={{
             height: 0,
             width: 0,
             border: "4vw solid transparent",
             borderTop: 0,
-            borderBottom: "6vw solid #C7F1FF",
-            transform: "rotate(33deg)",
+            borderBottom: "7vw solid #FD4E43",
+            transform: "rotate(45deg)",
             position: "absolute",
-            left: "10%",
-            top: "15%",
+            right: "10%",
+            top: "25%",
           }}
         />
         <Box
@@ -67,41 +76,28 @@ const Login: NextPage = () => {
             width: 0,
             border: "3vw solid transparent",
             borderTop: 0,
-            borderBottom: "8vw solid #FD4E43",
-            transform: "rotate(-20deg)",
+            borderBottom: "5vw solid #FD4E43",
+            transform: "rotate(-45deg)",
             position: "absolute",
-            right: "15%",
-            top: "20%",
+            left: "15%",
+            bottom: "20%",
           }}
         />
         <Box
           sx={{
             height: 0,
             width: 0,
-            border: "2vw solid transparent",
+            border: "7vw solid transparent",
             borderTop: 0,
-            borderBottom: "3vw solid #C7F1FF",
-            transform: "rotate(65deg)",
+            borderBottom: "12vw solid #C7F1FF",
+            transform: "rotate(25deg)",
             position: "absolute",
-            left: "20%",
-            bottom: "25%",
-          }}
-        />
-        <Box
-          sx={{
-            height: 0,
-            width: 0,
-            border: "5vw solid transparent",
-            borderTop: 0,
-            borderBottom: "10vw solid #FD4E43",
-            transform: "rotate(10deg)",
-            position: "absolute",
-            right: "5%",
-            bottom: "15%",
+            right: "8%",
+            bottom: "10%",
           }}
         />
 
-        {/* Login Form Container */}
+        {/* Sign Up Form Container */}
         <Box
           sx={{
             backgroundColor: "white",
@@ -128,7 +124,7 @@ const Login: NextPage = () => {
                 mb: 1
               }}
             >
-              Welcome Back!
+              Join Hello Socks!
             </Typography>
             <Typography 
               variant="body1" 
@@ -138,7 +134,7 @@ const Login: NextPage = () => {
                 fontSize: 16
               }}
             >
-              Sign in to your Hello Socks account
+              Create your account and start shopping for the perfect socks
             </Typography>
           </Box>
 
@@ -146,9 +142,9 @@ const Login: NextPage = () => {
 
           <Box sx={{ textAlign: "center", mt: 3 }}>
             <Typography variant="body2" sx={{ color: "#5C727D" }}>
-              Don't have an account?{" "}
-              <Link href="/sign-up" style={{ color: "#000", fontWeight: 500 }}>
-                Sign up here
+              Already have an account?{" "}
+              <Link href="/login" style={{ color: "#000", fontWeight: 500 }}>
+                Sign in here
               </Link>
             </Typography>
           </Box>
@@ -156,6 +152,4 @@ const Login: NextPage = () => {
       </Box>
     </Box>
   );
-};
-
-export default Login;
+}

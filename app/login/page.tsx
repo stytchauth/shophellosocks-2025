@@ -1,14 +1,15 @@
 import { Box, Typography } from "@mui/material";
-import type { NextPage, GetServerSideProps } from "next";
-import Head from "next/head";
+import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { withAuth, AuthenticatedPageProps } from "../lib/ssrAuth";
-import TwoFactorAuth from "../components/TwoFactorAuth";
+import LoginForm from "../../components/LoginForm";
 
-interface TwoFactorAuthProps extends AuthenticatedPageProps {}
+export const metadata: Metadata = {
+  title: "Login - Hello Socks",
+  description: "Log in to your Hello Socks account",
+};
 
-const TwoFactorAuthPage: NextPage<TwoFactorAuthProps> = ({ user }) => {
+export default function Login() {
   return (
     <Box
       minHeight={"100vh"}
@@ -16,14 +17,6 @@ const TwoFactorAuthPage: NextPage<TwoFactorAuthProps> = ({ user }) => {
       flexDirection={"column"}
       sx={{ backgroundColor: "#FFD94A" }}
     >
-      <Head>
-        <title>Two-Factor Authentication - Hello Socks</title>
-        <meta
-          name="description"
-          content="Complete two-factor authentication"
-        />
-      </Head>
-
       {/* Header */}
       <Box
         paddingX={3}
@@ -55,26 +48,26 @@ const TwoFactorAuthPage: NextPage<TwoFactorAuthProps> = ({ user }) => {
           sx={{
             height: 0,
             width: 0,
-            border: "3vw solid transparent",
+            border: "4vw solid transparent",
             borderTop: 0,
-            borderBottom: "5vw solid #C7F1FF",
-            transform: "rotate(45deg)",
+            borderBottom: "6vw solid #C7F1FF",
+            transform: "rotate(33deg)",
             position: "absolute",
-            left: "8%",
-            top: "20%",
+            left: "10%",
+            top: "15%",
           }}
         />
         <Box
           sx={{
             height: 0,
             width: 0,
-            border: "4vw solid transparent",
+            border: "3vw solid transparent",
             borderTop: 0,
             borderBottom: "8vw solid #FD4E43",
-            transform: "rotate(-30deg)",
+            transform: "rotate(-20deg)",
             position: "absolute",
-            right: "12%",
-            top: "15%",
+            right: "15%",
+            top: "20%",
           }}
         />
         <Box
@@ -83,10 +76,10 @@ const TwoFactorAuthPage: NextPage<TwoFactorAuthProps> = ({ user }) => {
             width: 0,
             border: "2vw solid transparent",
             borderTop: 0,
-            borderBottom: "4vw solid #C7F1FF",
-            transform: "rotate(70deg)",
+            borderBottom: "3vw solid #C7F1FF",
+            transform: "rotate(65deg)",
             position: "absolute",
-            left: "18%",
+            left: "20%",
             bottom: "25%",
           }}
         />
@@ -96,15 +89,15 @@ const TwoFactorAuthPage: NextPage<TwoFactorAuthProps> = ({ user }) => {
             width: 0,
             border: "5vw solid transparent",
             borderTop: 0,
-            borderBottom: "9vw solid #FD4E43",
-            transform: "rotate(15deg)",
+            borderBottom: "10vw solid #FD4E43",
+            transform: "rotate(10deg)",
             position: "absolute",
-            right: "6%",
-            bottom: "20%",
+            right: "5%",
+            bottom: "15%",
           }}
         />
 
-        {/* 2FA Content */}
+        {/* Login Form Container */}
         <Box
           sx={{
             backgroundColor: "white",
@@ -131,28 +124,32 @@ const TwoFactorAuthPage: NextPage<TwoFactorAuthProps> = ({ user }) => {
                 mb: 1
               }}
             >
-              Two-Factor Authentication
+              Welcome Back!
             </Typography>
             <Typography 
               variant="body1" 
               sx={{ 
                 textAlign: "center",
                 color: "#5C727D",
-                fontSize: 16,
-                mb: 3
+                fontSize: 16
               }}
             >
-              We&apos;ll send a verification code to your registered phone number
+              Sign in to your Hello Socks account
             </Typography>
           </Box>
 
-          <TwoFactorAuth user={user} />
+          <LoginForm />
+
+          <Box sx={{ textAlign: "center", mt: 3 }}>
+            <Typography variant="body2" sx={{ color: "#5C727D" }}>
+              Don&apos;t have an account?{" "}
+              <Link href="/sign-up" style={{ color: "#000", fontWeight: 500 }}>
+                Sign up here
+              </Link>
+            </Typography>
+          </Box>
         </Box>
       </Box>
     </Box>
   );
-};
-
-export const getServerSideProps: GetServerSideProps<TwoFactorAuthProps> = withAuth();
-
-export default TwoFactorAuthPage;
+}

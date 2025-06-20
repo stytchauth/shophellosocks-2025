@@ -1,14 +1,19 @@
 import { Box, Typography } from "@mui/material";
-import type { NextPage, GetServerSideProps } from "next";
-import Head from "next/head";
+import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import SmsEnrollment from "../components/SmsEnrollment";
-import { withAuth, AuthenticatedPageProps } from "../lib/ssrAuth";
+import { requireAuth } from "../../lib/auth-server";
+import SmsEnrollment from "../../components/SmsEnrollment";
 
-interface EnrollProps extends AuthenticatedPageProps {}
+export const metadata: Metadata = {
+  title: "Enroll - Hello Socks",
+  description: "Enroll with Hello Socks",
+};
 
-const Enroll: NextPage<EnrollProps> = ({ user }) => {
+export default async function Enroll() {
+  // Require basic authentication but not 2FA (since we're enrolling here)
+  const { user } = await requireAuth();
+
   return (
     <Box
       minHeight={"100vh"}
@@ -16,14 +21,6 @@ const Enroll: NextPage<EnrollProps> = ({ user }) => {
       flexDirection={"column"}
       sx={{ backgroundColor: "#FFD94A" }}
     >
-      <Head>
-        <title>Enroll - Hello Socks</title>
-        <meta
-          name="description"
-          content="Enroll with Hello Socks"
-        />
-      </Head>
-
       {/* Header */}
       <Box
         paddingX={3}
@@ -104,7 +101,7 @@ const Enroll: NextPage<EnrollProps> = ({ user }) => {
           }}
         />
 
-        {/* Placeholder Content */}
+        {/* Enrollment Content */}
         <Box
           sx={{
             backgroundColor: "white",
@@ -151,8 +148,4 @@ const Enroll: NextPage<EnrollProps> = ({ user }) => {
       </Box>
     </Box>
   );
-};
-
-export const getServerSideProps: GetServerSideProps<EnrollProps> = withAuth();
-
-export default Enroll;
+}

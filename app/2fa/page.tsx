@@ -1,11 +1,19 @@
 import { Box, Typography } from "@mui/material";
-import type { NextPage } from "next";
-import Head from "next/head";
+import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import LoginForm from "../components/LoginForm";
+import { requireAuth } from "../../lib/auth-server";
+import TwoFactorAuth from "../../components/TwoFactorAuth";
 
-const Enroll: NextPage = () => {
+export const metadata: Metadata = {
+  title: "Two-Factor Authentication - Hello Socks",
+  description: "Complete two-factor authentication",
+};
+
+export default async function TwoFactorAuthPage() {
+  // Require basic authentication but not 2FA (since we're completing it here)
+  const { user } = await requireAuth();
+
   return (
     <Box
       minHeight={"100vh"}
@@ -13,14 +21,6 @@ const Enroll: NextPage = () => {
       flexDirection={"column"}
       sx={{ backgroundColor: "#FFD94A" }}
     >
-      <Head>
-        <title>Sign Up - Hello Socks</title>
-        <meta
-          name="description"
-          content="Create your Hello Socks account"
-        />
-      </Head>
-
       {/* Header */}
       <Box
         paddingX={3}
@@ -47,18 +47,18 @@ const Enroll: NextPage = () => {
         paddingY={4}
         sx={{ position: "relative", overflowX: "hidden" }}
       >
-        {/* Background decorative triangles - different positioning from login */}
+        {/* Background decorative triangles */}
         <Box
           sx={{
             height: 0,
             width: 0,
-            border: "6vw solid transparent",
+            border: "3vw solid transparent",
             borderTop: 0,
-            borderBottom: "9vw solid #C7F1FF",
-            transform: "rotate(-15deg)",
+            borderBottom: "5vw solid #C7F1FF",
+            transform: "rotate(45deg)",
             position: "absolute",
-            left: "5%",
-            top: "10%",
+            left: "8%",
+            top: "20%",
           }}
         />
         <Box
@@ -67,41 +67,41 @@ const Enroll: NextPage = () => {
             width: 0,
             border: "4vw solid transparent",
             borderTop: 0,
-            borderBottom: "7vw solid #FD4E43",
-            transform: "rotate(45deg)",
+            borderBottom: "8vw solid #FD4E43",
+            transform: "rotate(-30deg)",
             position: "absolute",
-            right: "10%",
-            top: "25%",
+            right: "12%",
+            top: "15%",
           }}
         />
         <Box
           sx={{
             height: 0,
             width: 0,
-            border: "3vw solid transparent",
+            border: "2vw solid transparent",
             borderTop: 0,
-            borderBottom: "5vw solid #FD4E43",
-            transform: "rotate(-45deg)",
+            borderBottom: "4vw solid #C7F1FF",
+            transform: "rotate(70deg)",
             position: "absolute",
-            left: "15%",
+            left: "18%",
+            bottom: "25%",
+          }}
+        />
+        <Box
+          sx={{
+            height: 0,
+            width: 0,
+            border: "5vw solid transparent",
+            borderTop: 0,
+            borderBottom: "9vw solid #FD4E43",
+            transform: "rotate(15deg)",
+            position: "absolute",
+            right: "6%",
             bottom: "20%",
           }}
         />
-        <Box
-          sx={{
-            height: 0,
-            width: 0,
-            border: "7vw solid transparent",
-            borderTop: 0,
-            borderBottom: "12vw solid #C7F1FF",
-            transform: "rotate(25deg)",
-            position: "absolute",
-            right: "8%",
-            bottom: "10%",
-          }}
-        />
 
-        {/* Enroll Form Container */}
+        {/* 2FA Content */}
         <Box
           sx={{
             backgroundColor: "white",
@@ -128,34 +128,24 @@ const Enroll: NextPage = () => {
                 mb: 1
               }}
             >
-              Join Hello Socks!
+              Two-Factor Authentication
             </Typography>
             <Typography 
               variant="body1" 
               sx={{ 
                 textAlign: "center",
                 color: "#5C727D",
-                fontSize: 16
+                fontSize: 16,
+                mb: 3
               }}
             >
-              Create your account and start shopping for the perfect socks
+              We&apos;ll send a verification code to your registered phone number
             </Typography>
           </Box>
 
-          <LoginForm />
-
-          <Box sx={{ textAlign: "center", mt: 3 }}>
-            <Typography variant="body2" sx={{ color: "#5C727D" }}>
-              Already have an account?{" "}
-              <Link href="/login" style={{ color: "#000", fontWeight: 500 }}>
-                Sign in here
-              </Link>
-            </Typography>
-          </Box>
+          <TwoFactorAuth user={user} />
         </Box>
       </Box>
     </Box>
   );
-};
-
-export default Enroll;
+}

@@ -1,4 +1,5 @@
 import {NextIncomingMessage} from "next/dist/server/request-meta";
+import { NextRequest } from "next/server";
 
 // Helper functions to account for the fact this applications is deployed on many different domains via Vercel, and on localhost
 
@@ -13,7 +14,13 @@ export const getDomainFromWindow = () => {
 };
 
 // Use on the backend (API, getServerSideProps) to get the host domain
-export const getDomainFromRequest = (req: NextIncomingMessage) => {
+export const getDomainFromRequest = (req: NextIncomingMessage | NextRequest) => {
+  if (req instanceof NextRequest) {
+    // App Router NextRequest
+    return req.nextUrl.origin;
+  }
+  
+  // Pages Router NextIncomingMessage
   const host = req.headers.host || "";
   const protocol = "http://";
 

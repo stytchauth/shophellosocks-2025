@@ -1,6 +1,8 @@
+"use client";
+
 import { Box, Button, Typography } from "@mui/material";
 import React, { useState, useEffect } from "react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import OtpInput from "./OtpInput";
 
 interface TwoFactorAuthProps {
