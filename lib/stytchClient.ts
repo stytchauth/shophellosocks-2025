@@ -5,11 +5,7 @@ export const loadStytch = () => {
   if (!client) {
     client = new stytch.Client({
       project_id: process.env.STYTCH_PROJECT_ID || "",
-      secret: process.env.STYTCH_SECRET || "",
-      env:
-        process.env.STYTCH_PROJECT_ENV === "live"
-          ? stytch.envs.live
-          : stytch.envs.test,
+      secret: process.env.STYTCH_PROJECT_SECRET || "",
     });
   }
 

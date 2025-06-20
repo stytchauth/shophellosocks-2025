@@ -3,13 +3,11 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import LoginBackdrop from "../components/LoginBackdrop";
 import { useEffect, useState } from "react";
 import Header from "../components/Header";
 import SideNavCart from "../components/SideNavCart";
 import Fade from "@mui/material/Fade";
 import { useStytch, useStytchSession, useStytchUser } from "@stytch/nextjs";
-import StytchMessage from "../components/StytchMessage";
 import SiteFooter from "../components/SiteFooter";
 import { useRouter } from "next/router";
 
@@ -23,7 +21,6 @@ enum DEMO_STATE {
 }
 
 const Home: NextPage = () => {
-  const [loginOpen, setLoginOpen] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
   const { user } = useStytchUser();
   const stytch = useStytch();
@@ -51,8 +48,7 @@ const Home: NextPage = () => {
   useEffect(() => {
     if (demoState == DEMO_STATE.INIT && user)
       setDemoState(DEMO_STATE.LOGGED_IN);
-    if (loginOpen && user) setLoginOpen(false);
-  }, [loginOpen, user, demoState]);
+  }, [user, demoState]);
 
   useEffect(() => {
     if (
@@ -81,104 +77,14 @@ const Home: NextPage = () => {
           content="An ecommerce demo application powered by Stytch"
         />
       </Head>
-      <LoginBackdrop open={loginOpen} onDismiss={() => setLoginOpen(false)} />
-      {demoState === DEMO_STATE.INIT && (
-        <StytchMessage delay={1500} location="top-r">
-          <>
-            <Typography mb={2} variant="body2">
-              Hello Socks is a demo application created by Stytch, demonstrating{" "}
-              <Link
-                color="inherit"
-                sx={{ fontWeight: 500 }}
-                href="https://stytch.com/products/email-magic-links"
-                target="_blank"
-              >
-                Email Magic Links
-              </Link>
-              ,{" "}
-              <Link
-                color="inherit"
-                sx={{ fontWeight: 500 }}
-                target="_blank"
-                href="https://stytch.com/products/oauth"
-              >
-                OAuth
-              </Link>
-              , and{" "}
-              <Link
-                color="inherit"
-                sx={{ fontWeight: 500 }}
-                target="_blank"
-                href="https://stytch.com/products/magic-links"
-              >
-                Embeddable Magic Links
-              </Link>
-              .
-            </Typography>
-            <Typography variant="body2">
-              {`Click the "Log in" button to see these in action.`}
-            </Typography>
-          </>
-        </StytchMessage>
-      )}
-      {demoState === DEMO_STATE.LOGGED_IN && user && (
-        <StytchMessage delay={1750} location="top-l">
-          <>
-            <Typography mb={2} variant="body2">
-              Improve conversions up to 300%. By embedding tokens into your
-              email, SMS, or other marketing campaign CTAs, users can jump back
-              into your platform without having to re-authenticate. Learn more
-              about{" "}
-              <Link
-                color="inherit"
-                sx={{ fontWeight: 500 }}
-                target="_blank"
-                href="https://stytch.com/products/magic-links"
-              >
-                Embeddable Magic Links
-              </Link>
-              .
-            </Typography>
-            <Typography variant="body2">
-              {`Click the “Log out” button to see this in action. You'll receive an embeddable magic link at `}
-              <Typography
-                component={"span"}
-                variant="body2"
-                sx={{ fontWeight: 500 }}
-              >
-                {`${user.emails[0].email}`}
-              </Typography>
-              <Typography component={"span"} variant="body2">
-                .
-              </Typography>
-            </Typography>
-          </>
-        </StytchMessage>
-      )}
-      {demoState === DEMO_STATE.LOGGED_OUT_SUCCESS && (
-        <StytchMessage delay={0} location="top-l">
-          <Typography variant="body2">
-            You are logged out. Check your email inbox for the embeddable magic
-            link.
-          </Typography>
-        </StytchMessage>
-      )}
-      {demoState === DEMO_STATE.LOGGED_OUT_ERROR && (
-        <StytchMessage delay={0} location="top-l">
-          <Typography variant="body2">
-            {`Sorry, something went wrong! Press "Log in" to try the demo again.`}
-          </Typography>
-        </StytchMessage>
-      )}
+      
       <Header
-        onLogin={() => setLoginOpen(true)}
         onCartClick={() => setCartOpen(!cartOpen)}
         onLogout={demoLogoutFunction}
         animatePrimaryButton={
           (demoState === DEMO_STATE.INIT ||
             demoState === DEMO_STATE.LOGGED_IN ||
-            demoState === DEMO_STATE.LOGGED_OUT_ERROR) &&
-          !loginOpen
+            demoState === DEMO_STATE.LOGGED_OUT_ERROR)
         }
         disablePrimaryButton={demoState === DEMO_STATE.LOG_OUT_IN_PROGRESS}
         useAuthedHeader={

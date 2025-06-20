@@ -1,49 +1,13 @@
 import { Backdrop, Box, Button, Typography } from "@mui/material";
-import React, { useState } from "react";
-import { StytchLogin } from "@stytch/nextjs";
-import {
-  StytchLoginConfig,
-  OAuthProviders,
-  OneTapPositions,
-  Products,
-  StyleConfig,
-} from "@stytch/vanilla-js";
-import { getDomainFromWindow } from "../lib/urlUtils";
+import React from "react";
 import { Stack } from "@mui/system";
 import CloseIcon from "@mui/icons-material/Close";
 import Image from "next/image";
+import LoginForm from "./LoginForm";
 
 type Props = {
   open: boolean;
   onDismiss: () => void;
-};
-
-const sdkStyle: StyleConfig = {
-  fontFamily: '"Helvetica New", Helvetica, sans-serif',
-  colors: {
-    primary: "#000000"
-  },
-  hideHeaderText: true,
-};
-
-const sdkConfig: StytchLoginConfig = {
-  products: [Products.oauth, Products.emailMagicLinks],
-  emailMagicLinksOptions: {
-    loginRedirectURL: getDomainFromWindow() + "/authenticate",
-    loginExpirationMinutes: 30,
-    signupRedirectURL: getDomainFromWindow() + "/authenticate",
-    signupExpirationMinutes: 30,
-    createUserAsPending: false,
-  },
-  oauthOptions: {
-    providers: [
-      { type: OAuthProviders.Google },
-      { type: OAuthProviders.Facebook },
-      { type: OAuthProviders.Apple },
-    ],
-    loginRedirectURL: getDomainFromWindow() + "/authenticate",
-    signupRedirectURL: getDomainFromWindow() + "/authenticate",
-  },
 };
 
 function LoginBackdrop({ open, onDismiss }: Props) {
@@ -76,8 +40,8 @@ function LoginBackdrop({ open, onDismiss }: Props) {
           <Box width={"44px"}></Box>
         </Stack>
         <Image src="/icon.png" alt="sock" width={37} height={47} />
-        <Box paddingX={8} mt={3} sx={{ color: "black" }}>
-          <StytchLogin config={sdkConfig} styles={sdkStyle} />
+        <Box paddingX={8} mt={3}>
+          <LoginForm />
         </Box>
       </Box>
     </Backdrop>

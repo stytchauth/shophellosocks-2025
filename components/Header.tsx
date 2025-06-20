@@ -13,6 +13,7 @@ import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import Image from "next/image";
+import Link from "next/link";
 import { useStytch, useStytchUser } from "@stytch/nextjs";
 import AnimatedButton from "./AnimatedButton";
 import SideNavCart from "./SideNavCart";
@@ -69,24 +70,48 @@ function Header({
       </Box>
 
       <Stack gap={2} direction="row" alignItems={"center"}>
-        {animatePrimaryButton ? (
-          <AnimatedButton
-            disabled={disablePrimaryButton}
-            onClick={useAuthedHeader ? onLogout : onLogin}
-          >
-            <Typography variant="h3" sx={{ whiteSpace: "nowrap" }}>
-              {useAuthedHeader ? "Log out" : "Log in"}
-            </Typography>
-          </AnimatedButton>
+        {useAuthedHeader ? (
+          animatePrimaryButton ? (
+            <AnimatedButton
+              disabled={disablePrimaryButton}
+              onClick={onLogout}
+            >
+              <Typography variant="h3" sx={{ whiteSpace: "nowrap" }}>
+                Log out
+              </Typography>
+            </AnimatedButton>
+          ) : (
+            <Button
+              disabled={disablePrimaryButton}
+              onClick={onLogout}
+            >
+              <Typography variant="h3">
+                Log out
+              </Typography>
+            </Button>
+          )
         ) : (
-          <Button
-            disabled={disablePrimaryButton}
-            onClick={useAuthedHeader ? onLogout : onLogin}
-          >
-            <Typography variant="h3">
-              {useAuthedHeader ? "Log out" : "Log in"}
-            </Typography>
-          </Button>
+          animatePrimaryButton ? (
+            <Link href="/login" passHref>
+              <AnimatedButton
+                disabled={disablePrimaryButton}
+              >
+                <Typography variant="h3" sx={{ whiteSpace: "nowrap" }}>
+                  Log in
+                </Typography>
+              </AnimatedButton>
+            </Link>
+          ) : (
+            <Link href="/login" passHref>
+              <Button
+                disabled={disablePrimaryButton}
+              >
+                <Typography variant="h3">
+                  Log in
+                </Typography>
+              </Button>
+            </Link>
+          )
         )}
 
         <Box sx={{ borderLeft: "2px solid #5C727D" }} height="27px" />
