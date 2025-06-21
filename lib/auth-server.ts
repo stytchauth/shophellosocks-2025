@@ -26,6 +26,8 @@ export async function getAuthUser(options?: AuthOptions): Promise<AuthResult | n
     const cookieStore = await cookies();
     const sessionToken = cookieStore.get('stytch_session')?.value;
 
+    console.log("sessionToken", sessionToken)
+
     if (!sessionToken) {
       return null;
     }

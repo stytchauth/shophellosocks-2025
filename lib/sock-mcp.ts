@@ -23,6 +23,37 @@ export const initializeMCPServer = (server: McpServer) => {
     };
   };
 
+  server.resource(
+    "Orders",
+    new ResourceTemplate("shophellosocks://orders/{id}", {
+      list: async ({authInfo}) => {
+        const user = await loadStytch().users.get({user_id: authInfo.extra?.subject as string})
+
+        return {
+          resources: user.trusted_metadata.orders.map((order) => ({
+            ...order,
+            name: order.order_id,
+            uri: `shophellosocks://orders/${order.order_id}`,
+          })),
+        };
+      },
+    }),
+    async (uri, { id }, {authInfo}) => {
+      const user = await loadStytch().users.get({user_id: authInfo.extra?.subject as string})
+      const order = user.trusted_metadata.orders.find((order) => order.order_id === id);
+      return {
+        contents: [
+          {
+            uri: uri.href,
+            text: order
+              ? `sock_type: ${order.sock_type} status: ${order.status}`
+              : "NOT FOUND",
+          },
+        ],
+      };
+    },
+  );
+
   // Authentication info tool
   server.tool("whoami", "Get current user authentication info", async ({authInfo}) => ({
     content: [
@@ -74,18 +105,14 @@ export const initializeMCPServer = (server: McpServer) => {
       }
 
       // Get the base URL for the magic link callback
-      const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000';
-      const redirectUrl = `${baseUrl}/api/stytch-callback?order_id=${order.order_id}&action=confirm`;
+      const redirectUrl = `http://localhost:3000/api/stytch-callback?order_id=${order.order_id}&action=confirm`;
 
       // Send magic link with confirm_ai template
-      const magicLinkResponse = await stytchClient.magicLinks.email.loginOrCreate({
+      const magicLinkResponse = await stytchClient.magicLinks.email.send({
         email: user.emails[0].email,
         login_magic_link_url: redirectUrl,
-        signup_magic_link_url: redirectUrl,
         login_expiration_minutes: 60,
-        signup_expiration_minutes: 60,
         login_template_id: "confirm_ai",
-        signup_template_id: "confirm_ai",
       });
 
       await stytchClient.users.update({
@@ -96,7 +123,7 @@ export const initializeMCPServer = (server: McpServer) => {
       })
 
       return formatResponse(
-        "Sock order placed successfully! Confirmation email sent.",
+        "Sock order placed successfully! A confirmation email has been sent to the address on file.",
         order
       );
     }

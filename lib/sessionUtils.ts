@@ -19,7 +19,7 @@ export function setSessionCookie(
     // TODO: httpOnly for remote dev only
     // httpOnly: true,
     // secure: true,
-    sameSite: 'strict',
+    sameSite: 'lax',
     path: '/',
     maxAge: 86400 // 24 hours
   });
