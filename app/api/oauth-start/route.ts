@@ -31,7 +31,7 @@ export async function GET(request: NextRequest) {
 
   // Get the current domain for redirect URL
   const domain = request.nextUrl.origin;
-  const redirectUrl = `${domain}/api/oauth-callback`;
+  const redirectUrl = `${domain}/api/stytch-callback`;
 
   // Construct Stytch OAuth start URL
   const stytchOAuthUrl = new URL('https://test.stytch.com/v1/public/oauth/google/start');

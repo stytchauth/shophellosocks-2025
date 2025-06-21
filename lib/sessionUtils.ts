@@ -10,56 +10,23 @@ export interface SessionData {
  * Sets a secure session cookie and clears any temporary cookies
  */
 export function setSessionCookie(
-  res: NextApiResponse | NextResponse,
+  res: NextResponse,
   sessionToken: string,
   clearCodeVerifier: boolean = false
 ) {
-  if (res instanceof NextResponse) {
-    // App Router response
-    res.cookies.set('stytch_session', sessionToken, {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'strict',
-      path: '/',
-      maxAge: 86400 // 24 hours
-    });
+  // App Router response
+  res.cookies.set('stytch_session', sessionToken, {
+    // TODO: httpOnly for remote dev only
+    // httpOnly: true,
+    // secure: true,
+    sameSite: 'strict',
+    path: '/',
+    maxAge: 86400 // 24 hours
+  });
 
-    if (clearCodeVerifier) {
-      res.cookies.delete('stytch_code_verifier');
-    }
-    return;
-  }
-
-  // Pages Router response
-  const cookies: string[] = [];
-
-  // Set session token cookie
-  const sessionCookieOptions = [
-    `stytch_session=${sessionToken}`,
-    'HttpOnly',
-    'Secure',
-    'SameSite=Strict',
-    'Path=/',
-    'Max-Age=86400' // 24 hours
-  ].join('; ');
-  
-  cookies.push(sessionCookieOptions);
-
-  // Clear code verifier cookie if needed (OAuth flow)
   if (clearCodeVerifier) {
-    const clearCodeVerifierCookie = [
-      'stytch_code_verifier=',
-      'HttpOnly',
-      'Secure',
-      'SameSite=Strict',
-      'Path=/',
-      'Max-Age=0'
-    ].join('; ');
-    
-    cookies.push(clearCodeVerifierCookie);
+    res.cookies.delete('stytch_code_verifier');
   }
-
-  res.setHeader('Set-Cookie', cookies);
 }
 
 /**

@@ -38,7 +38,7 @@ export async function getAuthUser(options?: AuthOptions): Promise<AuthResult | n
       session_token: sessionToken,
     });
 
-    console.log(authResponse, authResponse.session.authentication_factors)
+    console.log(authResponse)
 
     // If 2FA is required, validate authentication factors
     if (options?.requireTwoFactor) {

@@ -2,32 +2,23 @@
 
 import { Box, Button, Typography, TextField, Divider } from "@mui/material";
 import React, { useState } from "react";
-import OtpInput from "./OtpInput";
 
 function LoginForm() {
   const [email, setEmail] = useState("");
-  const [showOtpForm, setShowOtpForm] = useState(false);
+  const [showConfirmation, setShowConfirmation] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [isResending, setIsResending] = useState(false);
   const [emailError, setEmailError] = useState("");
-  const [otpError, setOtpError] = useState("");
 
   const handleGoogleOAuth = () => {
     window.location.href = "/api/oauth-start";
   };
 
-  const sendOtp = async (isResend = false) => {
+  const sendMagicLink = async () => {
     setEmailError("");
-    setOtpError("");
-    
-    if (isResend) {
-      setIsResending(true);
-    } else {
-      setIsLoading(true);
-    }
+    setIsLoading(true);
     
     try {
-      const response = await fetch("/api/send-otp", {
+      const response = await fetch("/api/send-magic-link", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -38,74 +29,34 @@ function LoginForm() {
       const data = await response.json();
 
       if (response.ok) {
-        setShowOtpForm(true);
+        setShowConfirmation(true);
       } else {
-        setEmailError(data.error_message || "Failed to send OTP");
+        setEmailError(data.error_message || "Failed to send magic link");
       }
     } catch (error) {
-      console.error("Error sending OTP:", error);
-      setEmailError("Failed to send OTP. Please try again.");
+      console.error("Error sending magic link:", error);
+      setEmailError("Failed to send magic link. Please try again.");
     } finally {
-      if (isResend) {
-        setIsResending(false);
-      } else {
-        setIsLoading(false);
-      }
+      setIsLoading(false);
     }
   };
 
   const handleEmailSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email) return;
-    await sendOtp(false);
-  };
-
-  const handleResendOtp = async () => {
-    await sendOtp(true);
-  };
-
-  const handleOtpComplete = async (code: string) => {
-    setOtpError("");
-    setIsLoading(true);
-    
-    try {
-      const response = await fetch("/api/verify-otp", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json",
-        },
-        body: JSON.stringify({ code }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        // Use redirect URL from response, defaulting to /enroll
-        window.location.href = data.redirect || "/enroll";
-      } else {
-        setOtpError(data.error_message || "Failed to verify OTP");
-      }
-    } catch (error) {
-      console.error("Error verifying OTP:", error);
-      setOtpError("Failed to verify OTP. Please try again.");
-    } finally {
-      setIsLoading(false);
-    }
+    await sendMagicLink();
   };
 
   const resetForm = () => {
     setEmail("");
-    setShowOtpForm(false);
+    setShowConfirmation(false);
     setIsLoading(false);
-    setIsResending(false);
     setEmailError("");
-    setOtpError("");
   };
 
   return (
     <Box sx={{ color: "black", width: "100%", maxWidth: 400 }}>
-      {!showOtpForm ? (
+      {!showConfirmation ? (
         <>
           <Button
             variant="contained"
@@ -153,41 +104,20 @@ function LoginForm() {
           </form>
         </>
       ) : (
-        <Box>
-          <Typography variant="h6" sx={{ mb: 2, textAlign: "center" }}>
-            Enter verification code
+        <Box sx={{ textAlign: "center" }}>
+          <Typography variant="h6" sx={{ mb: 2 }}>
+            Check your email
           </Typography>
-          <Typography variant="body2" sx={{ mb: 3, textAlign: "center", color: "gray" }}>
-            We sent a 6-digit code to {email}
+          <Typography variant="body2" sx={{ mb: 3, color: "gray" }}>
+            We sent a magic link to {email}. Click the link in your email to continue.
           </Typography>
-          <OtpInput onComplete={handleOtpComplete} onBack={resetForm} error={otpError} />
-          {isLoading && (
-            <Typography variant="body2" sx={{ textAlign: "center", color: "gray" }}>
-              Verifying...
-            </Typography>
-          )}
-          {isResending && (
-            <Typography variant="body2" sx={{ textAlign: "center", color: "gray" }}>
-              Resending...
-            </Typography>
-          )}
-          <Box sx={{ display: "flex", gap: 1, mt: 2 }}>
-            <Button
-              variant="text"
-              onClick={resetForm}
-              sx={{ color: "gray", flex: 1 }}
-            >
-              Back to email
-            </Button>
-            <Button
-              variant="text"
-              onClick={handleResendOtp}
-              disabled={isLoading || isResending}
-              sx={{ color: "gray", flex: 1 }}
-            >
-              {isResending ? "Resending..." : "Didn't get it? Resend"}
-            </Button>
-          </Box>
+          <Button
+            variant="text"
+            onClick={resetForm}
+            sx={{ color: "gray" }}
+          >
+            Back to email
+          </Button>
         </Box>
       )}
     </Box>
