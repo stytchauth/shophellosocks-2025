@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getDomainFromRequest } from "../../../lib/urlUtils";
 import crypto from "crypto";
 
 // Generate PKCE code verifier and challenge

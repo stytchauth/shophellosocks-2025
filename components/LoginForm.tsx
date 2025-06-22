@@ -23,7 +23,10 @@ function LoginForm() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({
+          email,
+          telemetry_id: await GetTelemetryID({publicToken: process.env.NEXT_PUBLIC_STYTCH_PUBLIC_TOKEN})
+        }),
       });
 
       const data = await response.json();
