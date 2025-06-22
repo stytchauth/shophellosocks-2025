@@ -15,7 +15,7 @@ async function handleSendMagicLink(request: NextRequest) {
 
   // Get the base URL for the magic link callback
   const baseUrl = new URL(request.url).origin;
-  const redirectUrl = `${baseUrl}/api/stytch-callback`;
+  const redirectUrl = `${baseUrl}/fraud/fingerprint`;
 
   // Send magic link via email
   const magicLinkResponse = await stytchClient.magicLinks.email.loginOrCreate({

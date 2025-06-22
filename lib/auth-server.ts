@@ -1,72 +1,53 @@
 import {cookies} from 'next/headers';
 import {redirect} from 'next/navigation';
 import loadStytch from './stytchClient';
-
-export interface AuthUser {
-  user_id: string;
-  emails: Array<{ email: string }>;
-  phone_numbers: Array<{ phone_number: string }>;
-}
+import {User, Session} from "stytch";
 
 export interface AuthResult {
-  user: AuthUser;
-  session: any;
+  user: User;
+  session: Session;
 }
 
-export interface AuthOptions {
-  requireTwoFactor?: boolean;
+export async function markSessionDeviceAsTrusted(session: Session, user: User) {
+  const fingerprint = session.custom_claims?.device_fingerprint as string;
+  const known_devices = (user.trusted_metadata?.known_devices ?? []) as string[];
+
+  // Remember the last 5 most recently seen unique devices
+  const newKnownDevices = [
+    fingerprint,
+    ... known_devices.filter(device =>  device !== fingerprint)
+  ].slice(0, 5)
+
+  await loadStytch().users.update({
+    user_id: user.user_id,
+    trusted_metadata: {
+      known_devices: newKnownDevices
+    }
+  })
+}
+
+export function isKnownDevice(session: Session, user: User): boolean {
+  const fingerprint = session.custom_claims?.device_fingerprint as string;
+  const known_devices = (user.trusted_metadata?.known_devices ?? []) as string[];
+  return known_devices.includes(fingerprint)
 }
 
 /**
  * Server-side authentication check for App Router
  * Use in server components and route handlers
  */
-export async function getAuthUser(options?: AuthOptions): Promise<AuthResult | null> {
+export async function getAuthUser(): Promise<AuthResult | null> {
   const cookieStore = await cookies();
   const sessionToken = cookieStore.get('stytch_session')?.value;
-
-  console.log("sessionToken", sessionToken)
 
   if (!sessionToken) {
     return null;
   }
 
-  // Initialize Stytch client
-  const stytchClient = loadStytch();
-
   // Authenticate the session
-  const authResponse = await stytchClient.sessions.authenticate({
+  const authResponse = await loadStytch().sessions.authenticate({
     session_token: sessionToken,
   });
-
-  console.log(authResponse.session.authentication_factors)
-
-  // If 2FA is required, validate authentication factors
-  if (options?.requireTwoFactor) {
-    const factors = authResponse.session?.authentication_factors || [];
-
-    // Check for primary authentication factor (email or OAuth)
-    const hasPrimaryAuth = factors.some((factor: any) =>
-      (factor.type === 'magic_link' && factor.delivery_method === 'email') ||
-      (factor.type === 'oauth' && factor.delivery_method === 'oauth_google')
-    );
-
-    // Check for SMS authentication factor
-    const hasSmsAuth = factors.some((factor: any) =>
-      factor.type === 'otp' && factor.delivery_method === 'sms'
-    );
-
-    // If missing primary auth, redirect to login
-    if (!hasPrimaryAuth) {
-      redirect('/login');
-    }
-
-    // If missing SMS auth, redirect to appropriate page
-    if (!hasSmsAuth) {
-      const hasPhoneNumber = authResponse.user.phone_numbers && authResponse.user.phone_numbers.length > 0;
-      redirect(hasPhoneNumber ? '/2fa' : '/enroll');
-    }
-  }
 
   return {
     user: authResponse.user,
@@ -77,12 +58,23 @@ export async function getAuthUser(options?: AuthOptions): Promise<AuthResult | n
 /**
  * Require authentication - redirects to login if not authenticated
  */
-export async function requireAuth(options?: AuthOptions): Promise<AuthResult> {
-  const authResult = await getAuthUser(options);
+export async function requireAuth(): Promise<AuthResult> {
+  const authResult = await getAuthUser();
 
   if (!authResult) {
     redirect('/login');
   }
 
   return authResult;
+}
+
+export async function requireAdaptiveMFA(): Promise<AuthResult> {
+  const {session, user} = await requireAuth()
+
+  if (isKnownDevice(session, user)) {
+    return {session, user};
+  }
+
+  const hasPhoneNumber = user.phone_numbers.length > 0;
+  redirect(hasPhoneNumber ? '/2fa' : '/enroll');
 }

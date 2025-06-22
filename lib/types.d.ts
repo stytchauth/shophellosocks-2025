@@ -1,3 +1,5 @@
 declare global {
-  async function GetTelemetryID(publicToken: string): Promise<string>;
+  function GetTelemetryID(params: { publicToken: string }): Promise<string>;
 }
+
+export {}

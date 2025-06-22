@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import loadStytch from "../../../../lib/stytchClient";
 import { setSessionCookie } from "../../../../lib/sessionUtils";
+import {markSessionDeviceAsTrusted} from "../../../../lib/auth-server";
 
 export async function POST(request: NextRequest) {
   try {
@@ -50,6 +51,9 @@ export async function POST(request: NextRequest) {
       code,
       session_token,
     });
+
+    // Mark the current session device as trusted
+    await markSessionDeviceAsTrusted(authResponse.session!, authResponse.user);
 
     // Create response
     const response = NextResponse.json({

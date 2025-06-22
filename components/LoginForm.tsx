@@ -25,7 +25,7 @@ function LoginForm() {
         },
         body: JSON.stringify({
           email,
-          telemetry_id: await GetTelemetryID({publicToken: process.env.NEXT_PUBLIC_STYTCH_PUBLIC_TOKEN})
+          telemetry_id: await GetTelemetryID({publicToken: process.env.NEXT_PUBLIC_STYTCH_PUBLIC_TOKEN!})
         }),
       });
 

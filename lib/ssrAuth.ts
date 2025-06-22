@@ -14,7 +14,7 @@ export interface SSRAuthResult {
 }
 
 export interface WithAuthOptions {
-  requireTwoFactor?: boolean;
+  requireAdaptiveMFA?: boolean;
 }
 
 /**
@@ -47,7 +47,7 @@ export async function validateSession(
     });
 
     // If 2FA is required, validate authentication factors
-    if (options?.requireTwoFactor) {
+    if (options?.requireAdaptiveMFA) {
       const factors = authResponse.session?.authentication_factors || [];
       
       // Check for primary authentication factor (email or OAuth)
