@@ -1,13 +1,7 @@
 import { Box, Typography } from "@mui/material";
-import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import LoginForm from "../../components/LoginForm";
-
-export const metadata: Metadata = {
-  title: "Login - Hello Socks",
-  description: "Log in to your Hello Socks account",
-};
 
 export default function Login() {
   return (

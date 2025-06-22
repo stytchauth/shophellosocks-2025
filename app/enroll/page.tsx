@@ -1,12 +1,6 @@
-import { Metadata } from "next";
 import { requireAuth } from "../../lib/auth-server";
 import SmsEnrollment from "../../components/SmsEnrollment";
 import PageLayout from "../../components/PageLayout";
-
-export const metadata: Metadata = {
-  title: "Enroll - Hello Socks",
-  description: "Enroll with Hello Socks",
-};
 
 export default async function Enroll() {
   // Require basic authentication but not 2FA (since we're enrolling here)

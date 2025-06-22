@@ -1,14 +1,8 @@
-import { Metadata } from "next";
 import { requireAuth } from "../../lib/auth-server";
 import { redirect } from "next/navigation";
 import loadStytch from "../../lib/stytchClient";
 import OrderConfirmation from "../../components/OrderConfirmation";
 import PageLayout from "../../components/PageLayout";
-
-export const metadata: Metadata = {
-  title: "Confirm Order - Hello Socks",
-  description: "Confirm your sock order",
-};
 
 interface SearchParams {
   order_id?: string;

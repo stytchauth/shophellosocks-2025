@@ -1,14 +1,5 @@
 import "../styles/globals.css";
-import { Metadata } from "next";
 import { Providers } from "./providers";
-
-export const metadata: Metadata = {
-  title: {
-    default: "Hello Socks",
-    template: "%s - Hello Socks",
-  },
-  description: "An ecommerce demo application powered by Stytch",
-};
 
 export default function RootLayout({
   children,

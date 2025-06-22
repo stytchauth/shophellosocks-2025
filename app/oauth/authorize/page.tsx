@@ -1,12 +1,6 @@
-import { Metadata } from "next";
 import {requireAuth} from "../../../lib/auth-server";
 import {IdentityProvider} from "../../../components/IdentityProvider";
 import PageLayout from "../../../components/PageLayout";
-
-export const metadata: Metadata = {
-  title: "Authorize - Hello Socks",
-  description: "Authorize with Hello Socks",
-};
 
 export default async function OAuthAuthorizationPage() {
   await requireAuth();

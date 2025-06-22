@@ -1,16 +1,10 @@
 import { Box, Stack, Typography } from "@mui/material";
-import { Metadata } from "next";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import {requireAdaptiveMFA, requireAuth} from "../../lib/auth-server";
 import ClientHeader from "../../components/ClientHeader";
 import SiteFooter from "../../components/SiteFooter";
 import ProductEntry from "../../components/ProductEntry";
-
-export const metadata: Metadata = {
-  title: "Cart - Hello Socks",
-  description: "Your Hello Socks shopping cart",
-};
 
 export default async function Cart() {
   // Require authentication with 2FA
