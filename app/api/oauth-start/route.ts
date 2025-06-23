@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
+import {setLoginState} from "../../../lib/sessionUtils";
 
 // Generate PKCE code verifier and challenge
 function generatePKCE() {
@@ -15,18 +16,19 @@ function generatePKCE() {
   return { codeVerifier, codeChallenge };
 }
 
-export async function GET(request: NextRequest) {
-  const publicToken = process.env.NEXT_PUBLIC_STYTCH_PUBLIC_TOKEN;
+const publicToken = process.env.NEXT_PUBLIC_STYTCH_PUBLIC_TOKEN as string;
 
-  if (!publicToken) {
-    return NextResponse.json(
-      { error_message: "Missing Stytch public token" },
-      { status: 500 }
-    );
-  }
+if (!publicToken) {
+  throw Error("Missing Stytch public token" )
+}
+
+export async function GET(request: NextRequest) {
 
   // Generate PKCE parameters
   const { codeVerifier, codeChallenge } = generatePKCE();
+
+  // Store PKCE code verifier as a cookie for later usage
+  await setLoginState(codeVerifier);
 
   // Get the current domain for redirect URL
   const domain = request.nextUrl.origin;
@@ -40,17 +42,5 @@ export async function GET(request: NextRequest) {
   stytchOAuthUrl.searchParams.set('code_challenge', codeChallenge);
   stytchOAuthUrl.searchParams.set('code_challenge_method', 'S256');
 
-  // Create redirect response
-  const response = NextResponse.redirect(stytchOAuthUrl.toString());
-  
-  // Store code verifier in httpOnly cookie
-  response.cookies.set('stytch_code_verifier', codeVerifier, {
-    httpOnly: true,
-    secure: true,
-    sameSite: 'strict',
-    path: '/',
-    maxAge: 600 // 10 minutes
-  });
-
-  return response;
+  return NextResponse.redirect(stytchOAuthUrl.toString());
 }

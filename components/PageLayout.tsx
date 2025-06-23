@@ -109,6 +109,7 @@ export default function PageLayout({
           maxWidth={600}
           width="100%"
           mx={3}
+          display="flex" flexDirection="column" alignItems="center"
         >
           {/* Header Section */}
           {(title || subtitle || showIcon) && (

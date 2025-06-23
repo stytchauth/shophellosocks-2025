@@ -2,6 +2,7 @@ import {cookies} from 'next/headers';
 import {redirect} from 'next/navigation';
 import loadStytch from './stytchClient';
 import {User, Session} from "stytch";
+import {getSessionCookie} from "./sessionUtils";
 
 export interface AuthResult {
   user: User;
@@ -37,8 +38,7 @@ export function isKnownDevice(session: Session, user: User): boolean {
  * Use in server components and route handlers
  */
 export async function getAuthUser(): Promise<AuthResult | null> {
-  const cookieStore = await cookies();
-  const sessionToken = cookieStore.get('stytch_session')?.value;
+  const sessionToken =  await getSessionCookie();
 
   if (!sessionToken) {
     return null;

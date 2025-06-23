@@ -5,10 +5,7 @@ import {withErrorHandling} from "../../../lib/routeWrapper";
 async function handleSendMagicLink(request: NextRequest) {
   const {email, telemetry_id} = await request.json();
 
-  // Initialize Stytch client
-  const stytchClient = loadStytch();
-
-  const dfpLookup = await stytchClient.fraud.fingerprint.lookup({telemetry_id})
+  const dfpLookup = await loadStytch().fraud.fingerprint.lookup({telemetry_id})
   if (dfpLookup.verdict.action !== "ALLOW") {
     throw Error("DFP Lookup failed.");
   }
@@ -18,7 +15,7 @@ async function handleSendMagicLink(request: NextRequest) {
   const redirectUrl = `${baseUrl}/fraud/fingerprint`;
 
   // Send magic link via email
-  const magicLinkResponse = await stytchClient.magicLinks.email.loginOrCreate({
+  const magicLinkResponse = await loadStytch().magicLinks.email.loginOrCreate({
     email,
     login_magic_link_url: redirectUrl,
     signup_magic_link_url: redirectUrl,
@@ -28,7 +25,6 @@ async function handleSendMagicLink(request: NextRequest) {
 
   return NextResponse.json({
     message: "Magic link sent successfully",
-    user_id: magicLinkResponse.user_id
   });
 }
 

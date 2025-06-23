@@ -33,35 +33,3 @@ export function withErrorHandling<T extends any[]>(
     }
   };
 }
-
-/**
- * Alternative version that takes a custom error message
- */
-export function withErrorHandlingAndMessage(
-  handler: (request: NextRequest) => Promise<NextResponse>,
-  errorMessage: string,
-  errorContext?: string
-) {
-  return async (request: NextRequest): Promise<NextResponse> => {
-    try {
-      return await handler(request);
-    } catch (error: any) {
-      const context = errorContext || 'Route handler';
-      console.error(`${context} error:`, error);
-      
-      // Handle specific Stytch errors
-      if (error.status_code) {
-        return NextResponse.json(
-          { error_message: error.error_message || errorMessage },
-          { status: error.status_code }
-        );
-      }
-      
-      // Handle general errors
-      return NextResponse.json(
-        { error_message: errorMessage },
-        { status: 500 }
-      );
-    }
-  };
-}

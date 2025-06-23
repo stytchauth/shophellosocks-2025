@@ -1,6 +1,7 @@
 import * as stytch from "stytch";
 
 let client: stytch.Client;
+
 export const loadStytch = () => {
   if (!client) {
     client = new stytch.Client({

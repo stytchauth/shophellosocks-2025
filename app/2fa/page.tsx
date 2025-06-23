@@ -9,7 +9,6 @@ export default async function TwoFactorAuthPage() {
   return (
     <PageLayout
       title="Two-Factor Authentication"
-      subtitle="We'll send a verification code to your registered phone number"
     >
       <TwoFactorAuth user={user} />
     </PageLayout>

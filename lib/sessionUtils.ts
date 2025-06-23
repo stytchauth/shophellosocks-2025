@@ -1,21 +1,29 @@
-import type { NextApiResponse } from "next";
-import { NextResponse } from "next/server";
+import {cookies} from "next/headers";
 
-export interface SessionData {
-  session_token: string;
-  user?: any;
+export async function setLoginState(state: string) {
+  const cookieStore = await cookies()
+  cookieStore.set('stytch_login_state', state, {
+    // TODO: httpOnly for remote dev only
+    // httpOnly: true,
+    // secure: true,
+    sameSite: 'lax',
+    path: '/',
+    maxAge: 86400 // 24 hours
+  });
+}
+export async function getLoginState(): Promise<string> {
+  const cookieStore = await cookies()
+  return cookieStore.get('stytch_login_state')?.value as string;
 }
 
 /**
  * Sets a secure session cookie and clears any temporary cookies
  */
-export function setSessionCookie(
-  res: NextResponse,
+export async function setSessionCookie(
   sessionToken: string,
-  clearCodeVerifier: boolean = false
 ) {
-  // App Router response
-  res.cookies.set('stytch_session', sessionToken, {
+  const cookieStore = await cookies()
+  cookieStore.set('stytch_session', sessionToken, {
     // TODO: httpOnly for remote dev only
     // httpOnly: true,
     // secure: true,
@@ -24,76 +32,20 @@ export function setSessionCookie(
     maxAge: 86400 // 24 hours
   });
 
-  if (clearCodeVerifier) {
-    res.cookies.delete('stytch_code_verifier');
-  }
+  cookieStore.delete('stytch_login_state');
+}
+
+export async function getSessionCookie(): Promise<string> {
+  const cookieStore = await cookies()
+  return cookieStore.get('stytch_session')?.value as string;
 }
 
 /**
  * Clears session and temporary cookies
  */
-export function clearSessionCookies(res: NextApiResponse | NextResponse) {
-  if (res instanceof NextResponse) {
-    // App Router response
-    res.cookies.delete('stytch_session');
-    res.cookies.delete('stytch_code_verifier');
-    res.cookies.delete('stytch_method_id');
-    return;
-  }
-
-  // Pages Router response
-  const cookies = [
-    // Clear session cookie
-    [
-      'stytch_session=',
-      'HttpOnly',
-      'Secure',
-      'SameSite=Strict',
-      'Path=/',
-      'Max-Age=0'
-    ].join('; '),
-    
-    // Clear code verifier cookie
-    [
-      'stytch_code_verifier=',
-      'HttpOnly',
-      'Secure',
-      'SameSite=Strict',
-      'Path=/',
-      'Max-Age=0'
-    ].join('; '),
-    
-    // Clear method ID cookie
-    [
-      'stytch_method_id=',
-      'HttpOnly',
-      'Secure',
-      'SameSite=Strict',
-      'Path=/',
-      'Max-Age=0'
-    ].join('; ')
-  ];
-
-  res.setHeader('Set-Cookie', cookies);
-}
-
-/**
- * Redirects user after successful authentication
- */
-export function redirectAfterAuth(res: NextApiResponse, redirectPath: string = '/enroll') {
-  res.status(302).setHeader('Location', redirectPath);
-  res.end();
-}
-
-/**
- * Redirects user after authentication failure
- */
-export function redirectAfterError(
-  res: NextApiResponse, 
-  errorType: string = 'auth_failed',
-  redirectPath: string = '/login'
-) {
-  clearSessionCookies(res);
-  res.status(302).setHeader('Location', `${redirectPath}?error=${errorType}`);
-  res.end();
+export async function clearSessionCookies() {
+  const cookieStore = await cookies()
+  // App Router response
+  cookieStore.delete('stytch_session');
+  cookieStore.delete('stytch_login_state');
 }

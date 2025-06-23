@@ -1,31 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import loadStytch from "../../../../lib/stytchClient";
+import {getSessionCookie, setLoginState} from "../../../../lib/sessionUtils";
 
 export async function POST(request: NextRequest) {
   try {
     const { phone_number } = await request.json();
 
-    if (!phone_number || typeof phone_number !== 'string') {
-      return NextResponse.json(
-        { error_message: "Phone number is required" },
-        { status: 400 }
-      );
-    }
-
-    // US phone number validation (10 digits, optional +1 prefix)
-    const phoneRegex = /^(\+1)?[2-9]\d{2}[2-9]\d{2}\d{4}$/;
-    if (!phoneRegex.test(phone_number)) {
-      return NextResponse.json(
-        { error_message: "Invalid phone number format. Use 10-digit US format (e.g., 2345678901)" },
-        { status: 400 }
-      );
-    }
-
-    // Ensure +1 prefix for Stytch
+    // Ensure +1 prefix to satisfy E164
     const formattedPhone = phone_number.startsWith('+1') ? phone_number : `+1${phone_number}`;
 
     // Get session token from cookie
-    const session_token = request.cookies.get('stytch_session')?.value;
+    const session_token = await getSessionCookie();
     
     if (!session_token) {
       return NextResponse.json(
@@ -34,14 +19,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Initialize Stytch client
-    const stytchClient = loadStytch();
-
     // Send OTP via SMS
-    const otpResponse = await stytchClient.otps.sms.send({
+    const otpResponse = await loadStytch().otps.sms.send({
       phone_number: formattedPhone,
       session_token,
-      expiration_minutes: 10, // OTP expires in 10 minutes
+      expiration_minutes: 10,
     });
 
     const phoneId = (otpResponse as any).phone_id;
@@ -58,14 +40,8 @@ export async function POST(request: NextRequest) {
       message: "SMS OTP sent successfully"
     });
 
-    // Store phone_id in httpOnly cookie
-    response.cookies.set('stytch_sms_method_id', phoneId, {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'strict',
-      path: '/',
-      maxAge: 600 // 10 minutes, same as OTP expiration
-    });
+    // Store phone_id for future use in verify-otp
+    await setLoginState(phoneId);
 
     return response;
 

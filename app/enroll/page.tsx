@@ -4,7 +4,7 @@ import PageLayout from "../../components/PageLayout";
 
 export default async function Enroll() {
   // Require basic authentication but not 2FA (since we're enrolling here)
-  const { user } = await requireAuth();
+  await requireAuth();
 
   return (
     <PageLayout

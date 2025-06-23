@@ -1,6 +1,6 @@
 import {NextRequest, NextResponse} from "next/server";
 import loadStytch from "../../../lib/stytchClient";
-import {setSessionCookie, clearSessionCookies} from "../../../lib/sessionUtils";
+import {setSessionCookie, clearSessionCookies, getLoginState} from "../../../lib/sessionUtils";
 import {cookies} from "next/headers";
 import {OAuthAuthenticateResponse, Session, User} from "stytch";
 import {MagicLinksAuthenticateResponse} from "stytch/types/lib/b2c/magic_links";
@@ -15,29 +15,23 @@ export async function GET(request: NextRequest) {
     const telemetryId = searchParams.get('telemetry_id');
 
     if (!token) {
-      const response = NextResponse.redirect(new URL('/login?error=missing_token', request.url));
-      clearSessionCookies(response);
-      return response;
+      await clearSessionCookies();
+      return NextResponse.redirect(new URL('/login?error=missing_token', request.url));
     }
 
     if (!telemetryId) {
-      const response = NextResponse.redirect(new URL('/login?error=missing_telemetry', request.url));
-      clearSessionCookies(response);
-      return response;
+      await clearSessionCookies();
+      return NextResponse.redirect(new URL('/login?error=missing_telemetry', request.url));
     }
 
-    // Initialize Stytch client
-    const stytchClient = loadStytch();
-
     // Perform fraud fingerprint lookup first
-    const fraudLookup = await stytchClient.fraud.fingerprint.lookup({
+    const fraudLookup = await loadStytch().fraud.fingerprint.lookup({
       telemetry_id: telemetryId
     });
 
     if (fraudLookup.verdict.action !== "ALLOW") {
-      const response = NextResponse.redirect(new URL('/login?error=fraud_check_failed', request.url));
-      clearSessionCookies(response);
-      return response;
+      await clearSessionCookies();
+      return NextResponse.redirect(new URL('/login?error=fraud_check_failed', request.url));
     }
 
     let user: User;
@@ -46,7 +40,7 @@ export async function GET(request: NextRequest) {
 
     if (tokenType === 'magic_links') {
       // Magic link flow - no code verifier needed
-      const authResponse = await stytchClient.magicLinks.authenticate({
+      const authResponse = await loadStytch().magicLinks.authenticate({
         token,
         session_token: request.cookies.get('stytch_session')?.value,
         session_duration_minutes: 120,
@@ -58,9 +52,8 @@ export async function GET(request: NextRequest) {
       session_token = authResponse.session_token;
       session = authResponse.session!;
     } else {
-      // Check if this is an OAuth flow by looking for the code verifier cookie
-      const codeVerifier = request.cookies.get('stytch_code_verifier')?.value;
-      const authResponse = await stytchClient.oauth.authenticate({
+      const codeVerifier = await getLoginState();
+      const authResponse = await loadStytch().oauth.authenticate({
         token,
         session_duration_minutes: 120,
         code_verifier: codeVerifier,
@@ -88,26 +81,22 @@ export async function GET(request: NextRequest) {
     // Direct to 2FA enrollment if the user does not have a phone number set
     const hasPhoneNumber = user.phone_numbers.length > 0;
     if (!hasPhoneNumber) {
-      const response = NextResponse.redirect(new URL('/enroll', request.url));
-      setSessionCookie(response, session_token, true);
-      return response;
+      await setSessionCookie(session_token);
+      return NextResponse.redirect(new URL('/enroll', request.url));
     }
     // Otherwise, only direct to 2FA if the user's device isn't trusted
     if (isKnownDevice(session, user)) {
-      const response = NextResponse.redirect(new URL('/cart', request.url));
-      setSessionCookie(response, session_token, true);
-      return response;
+      await setSessionCookie(session_token);
+      return NextResponse.redirect(new URL('/cart', request.url));
     } else {
-      const response = NextResponse.redirect(new URL('/2fa', request.url));
-      setSessionCookie(response, session_token, true);
-      return response;
+      await setSessionCookie(session_token);
+      return NextResponse.redirect(new URL('/2fa', request.url));
     }
   } catch (error) {
     console.error('Stytch callback error:', error);
 
     // Redirect to login with error and clear cookies
-    const response = NextResponse.redirect(new URL('/login?error=auth_failed', request.url));
-    clearSessionCookies(response);
-    return response;
+    await clearSessionCookies();
+    return  NextResponse.redirect(new URL('/login?error=auth_failed', request.url));
   }
 }

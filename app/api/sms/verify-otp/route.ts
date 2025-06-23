@@ -42,11 +42,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Initialize Stytch client
-    const stytchClient = loadStytch();
-
     // Authenticate OTP
-    const authResponse = await stytchClient.otps.authenticate({
+    const authResponse = await loadStytch().otps.authenticate({
       method_id,
       code,
       session_token,

@@ -1,7 +1,7 @@
 "use client";
 
 import { Box, Button, Typography } from "@mui/material";
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect, useCallback} from "react";
 import { useRouter } from "next/navigation";
 import OtpInput from "./OtpInput";
 
@@ -30,22 +30,13 @@ function TwoFactorAuth({ user }: TwoFactorAuthProps) {
   const phoneNumber = user.phone_numbers?.[0]?.phone_number || '';
   const maskedPhone = maskPhoneNumber(phoneNumber);
 
-  // Automatically send SMS on component mount
-  useEffect(() => {
-    if (phoneNumber && !smsSent) {
-      sendSms(false);
-    }
-  }, [phoneNumber, smsSent]);
-
-  const sendSms = async (isResend = false) => {
+  const sendSms = useCallback(async (isResend = false) => {
     setOtpError("");
-    
+
     if (isResend) {
       setIsResending(true);
-    } else {
-      setIsLoading(true);
     }
-    
+
     try {
       const response = await fetch("/api/sms/send-otp", {
         method: "POST",
@@ -68,11 +59,16 @@ function TwoFactorAuth({ user }: TwoFactorAuthProps) {
     } finally {
       if (isResend) {
         setIsResending(false);
-      } else {
-        setIsLoading(false);
       }
     }
-  };
+  }, [setIsResending, phoneNumber]);
+
+  // Automatically send SMS on component mount
+  useEffect(() => {
+    if (phoneNumber && !smsSent) {
+      sendSms(false);
+    }
+  }, [sendSms, phoneNumber, smsSent]);
 
   const handleResendSms = async () => {
     await sendSms(true);
