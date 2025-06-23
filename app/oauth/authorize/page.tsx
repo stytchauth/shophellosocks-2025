@@ -1,6 +1,6 @@
-import { requireAuth } from '~lib/auth-server';
-import { IdentityProvider } from '~components//IdentityProvider';
-import PageLayout from '~components//PageLayout';
+import { requireAuth } from '~lib/auth';
+import { IdentityProvider } from '~components/IdentityProvider';
+import PageLayout from '~components/PageLayout';
 
 export default async function OAuthAuthorizationPage() {
   await requireAuth();

@@ -1,10 +1,10 @@
 import { Box, Stack, Typography } from '@mui/material';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import { requireAdaptiveMFA, requireAuth } from '~lib/auth-server';
-import ClientHeader from '~components//ClientHeader';
-import SiteFooter from '~components//SiteFooter';
-import ProductEntry from '~components//ProductEntry';
+import { requireAdaptiveMFA, requireAuth } from '~lib/auth';
+import ClientHeader from '~components/ClientHeader';
+import SiteFooter from '~components/SiteFooter';
+import ProductEntry from '~components/ProductEntry';
 
 export default async function Cart() {
   // Require authentication with 2FA

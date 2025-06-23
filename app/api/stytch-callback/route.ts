@@ -5,10 +5,8 @@ import {
   clearSessionCookies,
   getLoginState,
 } from '~lib/sessionUtils';
-import { cookies } from 'next/headers';
-import { OAuthAuthenticateResponse, Session, User } from 'stytch';
-import { MagicLinksAuthenticateResponse } from 'stytch/types/lib/b2c/magic_links';
-import { isKnownDevice } from '~lib/auth-server';
+import { Session, User } from 'stytch';
+import { isKnownDevice } from '~lib/auth';
 
 export async function GET(request: NextRequest) {
   try {

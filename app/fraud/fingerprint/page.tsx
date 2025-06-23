@@ -3,8 +3,9 @@
 import { Box, Typography, CircularProgress } from '@mui/material';
 import { useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import PageLayout from '~components//PageLayout';
+import PageLayout from '~components/PageLayout';
 
+// The FingerprintPage functions as an interstitial
 export default function FraudFingerprintPage() {
   const searchParams = useSearchParams();
   const router = useRouter();

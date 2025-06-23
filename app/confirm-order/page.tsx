@@ -1,8 +1,7 @@
-import { requireAuth } from '~lib/auth-server';
+import { requireAuth } from '~lib/auth';
 import { redirect } from 'next/navigation';
-import stytchClient from '~lib/stytchClient';
-import OrderConfirmation from '~components//OrderConfirmation';
-import PageLayout from '~components//PageLayout';
+import OrderConfirmation from '~components/OrderConfirmation';
+import PageLayout from '~components/PageLayout';
 
 interface SearchParams {
   order_id?: string;

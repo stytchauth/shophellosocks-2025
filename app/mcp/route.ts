@@ -4,7 +4,7 @@ import {
 } from '@vercel/mcp-adapter';
 
 import { AuthInfo } from '@modelcontextprotocol/sdk/server/auth/types.js';
-import { initializeMCPServer } from '~lib/sock-mcp';
+import { initializeMCPServer } from '~lib/mcpServer';
 import stytchClient from '~lib/stytchClient';
 
 const authenticatedHandler = withMcpAuth(

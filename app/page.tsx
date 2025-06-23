@@ -3,7 +3,7 @@ import Image from 'next/image';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ClientHeader from '~components/ClientHeader';
 import SiteFooter from '~components/SiteFooter';
-import { getAuthUser } from '~lib/auth-server';
+import { getAuthUser } from '~lib/auth';
 
 export default async function Home() {
   const authResult = await getAuthUser();

@@ -17,6 +17,10 @@ const styles = {
   },
 } satisfies StyleConfig;
 
+// The IdentityProvider is the only part of this demo that uses the Stytch B2C UI components
+// During local development, it reads from the stytch_session cookie stored by the backend servies
+// During remote deployment, CNAMEs are utilized to share the cookie information between your
+// backend API (e.g. customer.com) and the Stytch backend (e.g. auth.customer.com)
 export function IdentityProvider() {
   return (
     <StytchProvider stytch={client}>

@@ -1,9 +1,5 @@
-import { Box, Typography } from '@mui/material';
-import Image from 'next/image';
-import Link from 'next/link';
-import LoginForm from '~components//LoginForm';
-import PageLayout from '~components//PageLayout';
-import TwoFactorAuth from '~components//TwoFactorAuth';
+import LoginForm from '~components/LoginForm';
+import PageLayout from '~components/PageLayout';
 
 export default function Login() {
   return (

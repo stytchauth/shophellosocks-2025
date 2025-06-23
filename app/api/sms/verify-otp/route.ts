@@ -5,7 +5,7 @@ import {
   getSessionCookie,
   setSessionCookie,
 } from '~lib/sessionUtils';
-import { markSessionDeviceAsTrusted } from '~lib/auth-server';
+import { markSessionDeviceAsTrusted } from '~lib/auth';
 import { withErrorHandling } from '~lib/routeWrapper';
 
 async function handleVerifyOTP(request: NextRequest) {

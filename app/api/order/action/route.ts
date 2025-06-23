@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { requireAuth } from '~lib/auth-server';
+import { requireAuth } from '~lib/auth';
 import { withErrorHandling } from '~lib/routeWrapper';
 import { OrderService, Order } from '~lib/OrderService';
 
