@@ -1,6 +1,6 @@
 import { requireAuth } from "../../lib/auth-server";
 import { redirect } from "next/navigation";
-import loadStytch from "../../lib/stytchClient";
+import stytchClient from "../../lib/stytchClient";
 import OrderConfirmation from "../../components/OrderConfirmation";
 import PageLayout from "../../components/PageLayout";
 
@@ -21,7 +21,7 @@ export default async function ConfirmOrderPage({
   }
 
   // Get the order from user's trusted metadata
-  const stytchClient = loadStytch();
+  const stytchClient = stytchClient;
   const userData = await stytchClient.users.get({ user_id: user.user_id });
   const orders = userData.trusted_metadata?.orders || [];
   const order = orders.find((o: any) => o.order_id === searchParams.order_id);

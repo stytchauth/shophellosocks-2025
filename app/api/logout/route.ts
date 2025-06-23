@@ -1,5 +1,5 @@
 import {NextRequest, NextResponse} from "next/server";
-import loadStytch from "../../../lib/stytchClient";
+import stytchClient from "../../../lib/stytchClient";
 import {clearSessionCookies, getSessionCookie} from "../../../lib/sessionUtils";
 
 export async function GET(request: NextRequest) {
@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
 
     if (sessionToken) {
       // Revoke the session
-      await loadStytch().sessions.revoke({
+      await stytchClient.sessions.revoke({
         session_token: sessionToken,
       });
     }

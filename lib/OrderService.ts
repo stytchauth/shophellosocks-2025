@@ -2,7 +2,7 @@
 import type {
   AuthInfo,
 } from "@modelcontextprotocol/sdk/server/auth/types.js";
-import loadStytch from "./stytchClient";
+import stytchClient from "./stytchClient";
 
 export type Order = {
   order_id: string;
@@ -25,12 +25,12 @@ export class OrderService {
   }
 
   async getOrders(): Promise<Order[]> {
-    const user = await loadStytch().users.get({user_id: this.userID});
+    const user = await stytchClient.users.get({user_id: this.userID});
     return (user.trusted_metadata?.orders ?? []) as Order[];
   }
 
   async setOrderHistory(orders: Order[]) {
-    await loadStytch().users.update({
+    await stytchClient.users.update({
       user_id: this.userID,
       trusted_metadata: {orders}
     })
@@ -42,7 +42,7 @@ export class OrderService {
   }
 
   async placeOrder({sockType}: { sockType: string }): Promise<Order> {
-    const user = await loadStytch().users.get({user_id: this.userID})
+    const user = await stytchClient.users.get({user_id: this.userID})
     const order = {
       order_id: `order_${Date.now()}`,
       sock_type: sockType,
@@ -51,7 +51,7 @@ export class OrderService {
 
     const confirmURL = `http://localhost:3000/fraud/fingerprint?order_id=${order.order_id}&action=confirm`;
 
-    await loadStytch().magicLinks.email.send({
+    await stytchClient.magicLinks.email.send({
       email: user.emails[0].email,
       login_magic_link_url: confirmURL,
       login_expiration_minutes: 60,
@@ -73,7 +73,7 @@ export class OrderService {
 
   private async modifyOrder(orderId: string, cb: (o: Order) => Order): Promise<Order> {
     const orders = await this.getOrders()
-    const user = await loadStytch().users.get({user_id: this.userID});
+    const user = await stytchClient.users.get({user_id: this.userID});
 
     // Find the order
     const idx = orders.findIndex((order) => order.order_id === orderId);

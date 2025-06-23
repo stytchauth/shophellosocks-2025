@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import loadStytch from "../../../../lib/stytchClient";
+import stytchClient from "../../../../lib/stytchClient";
 import {getSessionCookie, setLoginState} from "../../../../lib/sessionUtils";
 
 export async function POST(request: NextRequest) {
@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Send OTP via SMS
-    const otpResponse = await loadStytch().otps.sms.send({
+    const otpResponse = await stytchClient.otps.sms.send({
       phone_number: formattedPhone,
       session_token,
       expiration_minutes: 10,

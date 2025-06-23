@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import loadStytch from "../../../../lib/stytchClient";
+import stytchClient from "../../../../lib/stytchClient";
 import { setSessionCookie } from "../../../../lib/sessionUtils";
 import {markSessionDeviceAsTrusted} from "../../../../lib/auth-server";
 
@@ -43,7 +43,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Authenticate OTP
-    const authResponse = await loadStytch().otps.authenticate({
+    const authResponse = await stytchClient.otps.authenticate({
       method_id,
       code,
       session_token,

@@ -1,5 +1,5 @@
 import {NextRequest, NextResponse} from "next/server";
-import loadStytch from "../../../lib/stytchClient";
+import stytchClient from "../../../lib/stytchClient";
 import {setSessionCookie, clearSessionCookies, getLoginState} from "../../../lib/sessionUtils";
 import {cookies} from "next/headers";
 import {OAuthAuthenticateResponse, Session, User} from "stytch";
@@ -25,7 +25,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Perform fraud fingerprint lookup first
-    const fraudLookup = await loadStytch().fraud.fingerprint.lookup({
+    const fraudLookup = await stytchClient.fraud.fingerprint.lookup({
       telemetry_id: telemetryId
     });
 
@@ -40,7 +40,7 @@ export async function GET(request: NextRequest) {
 
     if (tokenType === 'magic_links') {
       // Magic link flow - no code verifier needed
-      const authResponse = await loadStytch().magicLinks.authenticate({
+      const authResponse = await stytchClient.magicLinks.authenticate({
         token,
         session_token: request.cookies.get('stytch_session')?.value,
         session_duration_minutes: 120,
@@ -53,7 +53,7 @@ export async function GET(request: NextRequest) {
       session = authResponse.session!;
     } else {
       const codeVerifier = await getLoginState();
-      const authResponse = await loadStytch().oauth.authenticate({
+      const authResponse = await stytchClient.oauth.authenticate({
         token,
         session_duration_minutes: 120,
         code_verifier: codeVerifier,

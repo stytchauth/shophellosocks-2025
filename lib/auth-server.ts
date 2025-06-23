@@ -1,6 +1,6 @@
 import {cookies} from 'next/headers';
 import {redirect} from 'next/navigation';
-import loadStytch from './stytchClient';
+import stytchClient from './stytchClient';
 import {User, Session} from "stytch";
 import {getSessionCookie} from "./sessionUtils";
 
@@ -19,7 +19,7 @@ export async function markSessionDeviceAsTrusted(session: Session, user: User) {
     ... known_devices.filter(device =>  device !== fingerprint)
   ].slice(0, 5)
 
-  await loadStytch().users.update({
+  await stytchClient.users.update({
     user_id: user.user_id,
     trusted_metadata: {
       known_devices: newKnownDevices
@@ -45,7 +45,7 @@ export async function getAuthUser(): Promise<AuthResult | null> {
   }
 
   // Authenticate the session
-  const authResponse = await loadStytch().sessions.authenticate({
+  const authResponse = await stytchClient.sessions.authenticate({
     session_token: sessionToken,
   });
 
