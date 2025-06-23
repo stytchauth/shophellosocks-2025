@@ -1,84 +1,39 @@
 import { NextRequest, NextResponse } from 'next/server';
 import stytchClient from '~lib/stytchClient';
-import { setSessionCookie } from '~lib/sessionUtils';
+import {
+  getLoginState,
+  getSessionCookie,
+  setSessionCookie,
+} from '~lib/sessionUtils';
 import { markSessionDeviceAsTrusted } from '~lib/auth-server';
+import { withErrorHandling } from '~lib/routeWrapper';
 
-export async function POST(request: NextRequest) {
-  try {
-    const { code } = await request.json();
+async function handleVerifyOTP(request: NextRequest) {
+  const { code } = await request.json();
 
-    // Get method_id from cookie
-    const method_id = request.cookies.get('stytch_sms_method_id')?.value;
+  const method_id = await getLoginState();
 
-    if (!method_id) {
-      return NextResponse.json(
-        { error_message: 'SMS method ID is required' },
-        { status: 400 }
-      );
-    }
+  const session_token = await getSessionCookie();
 
-    if (!code || typeof code !== 'string') {
-      return NextResponse.json(
-        { error_message: 'OTP code is required' },
-        { status: 400 }
-      );
-    }
+  const authResponse = await stytchClient.otps.authenticate({
+    method_id,
+    code,
+    session_token,
+  });
 
-    // Validate code format (should be 6 digits)
-    if (!/^\d{6}$/.test(code)) {
-      return NextResponse.json(
-        { error_message: 'Invalid OTP code format' },
-        { status: 400 }
-      );
-    }
+  // Update session cookie with new session token that includes SMS factor
+  await setSessionCookie(authResponse.session_token);
 
-    // Get session token from cookie
-    const session_token = request.cookies.get('stytch_session')?.value;
+  // Mark the current session device as trusted
+  await markSessionDeviceAsTrusted(authResponse.session!, authResponse.user);
 
-    if (!session_token) {
-      return NextResponse.json(
-        { error_message: 'Authentication required' },
-        { status: 401 }
-      );
-    }
-
-    // Authenticate OTP
-    const authResponse = await stytchClient.otps.authenticate({
-      method_id,
-      code,
-      session_token,
-    });
-
-    // Mark the current session device as trusted
-    await markSessionDeviceAsTrusted(authResponse.session!, authResponse.user);
-
-    // Create response
-    const response = NextResponse.json({
-      message: 'SMS OTP verified successfully',
-      user: authResponse.user,
-    });
-
-    // Update session cookie with new session token that includes SMS factor
-    setSessionCookie(response, authResponse.session_token);
-
-    // Clear the SMS method ID cookie after successful verification
-    response.cookies.delete('stytch_sms_method_id');
-
-    return response;
-  } catch (error: any) {
-    console.error('Verify SMS OTP error:', error);
-
-    // Handle specific Stytch errors
-    if (error.status_code) {
-      return NextResponse.json(
-        { error_message: error.error_message || 'Failed to verify SMS OTP' },
-        { status: error.status_code }
-      );
-    }
-
-    return NextResponse.json(
-      { error_message: 'Failed to verify SMS OTP' },
-      { status: 500 }
-    );
-  }
+  return NextResponse.json({
+    message: 'SMS OTP verified successfully',
+    user: authResponse.user,
+  });
 }
+
+export const POST = withErrorHandling(
+  handleVerifyOTP,
+  'Failed to verify SMS OTP'
+);
