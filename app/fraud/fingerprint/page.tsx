@@ -39,7 +39,6 @@ export default function FraudFingerprintPage() {
     <PageLayout
       title="Verifying Security"
       subtitle="Please wait while we verify your request..."
-      triangleVariant="variant1"
     >
       <Box
         sx={{

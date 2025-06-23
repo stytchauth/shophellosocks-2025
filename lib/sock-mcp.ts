@@ -150,7 +150,7 @@ export const initializeMCPServer = (server: McpServer) => {
     },
     async ({sockType}, {authInfo}) => {
       const svc = OrderService.fromMCPAuthInfo(authInfo);
-      const order = svc.placeOrder({sockType: sockType});
+      const order = await svc.placeOrder({sockType: sockType});
       return formatResponse(
         "Sock order placed successfully! A confirmation email has been sent to the address on file.",
         order

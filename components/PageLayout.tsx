@@ -8,111 +8,45 @@ interface PageLayoutProps {
   title?: string;
   subtitle?: string;
   showIcon?: boolean;
-  triangleVariant?: 'default' | 'variant1' | 'variant2';
 }
 
-// Different triangle configurations for variety
-const triangleConfigs = {
-  default: [
-    {
-      border: "5vw solid transparent",
-      borderBottom: "8vw solid #C7F1FF",
-      transform: "rotate(-25deg)",
-      left: "12%",
-      top: "18%",
-    },
-    {
-      border: "3vw solid transparent", 
-      borderBottom: "6vw solid #FD4E43",
-      transform: "rotate(55deg)",
-      right: "18%",
-      top: "15%",
-    },
-    {
-      border: "4vw solid transparent",
-      borderBottom: "7vw solid #C7F1FF", 
-      transform: "rotate(-10deg)",
-      left: "8%",
-      bottom: "30%",
-    },
-    {
-      border: "6vw solid transparent",
-      borderBottom: "11vw solid #FD4E43",
-      transform: "rotate(35deg)",
-      right: "12%",
-      bottom: "20%",
-    }
-  ],
-  variant1: [
-    {
-      border: "4vw solid transparent",
-      borderBottom: "7vw solid #C7F1FF",
-      transform: "rotate(-15deg)",
-      left: "10%",
-      top: "22%",
-    },
-    {
-      border: "3vw solid transparent",
-      borderBottom: "6vw solid #FD4E43", 
-      transform: "rotate(40deg)",
-      right: "15%",
-      top: "18%",
-    },
-    {
-      border: "2vw solid transparent",
-      borderBottom: "5vw solid #C7F1FF",
-      transform: "rotate(65deg)",
-      left: "12%",
-      bottom: "28%",
-    },
-    {
-      border: "5vw solid transparent",
-      borderBottom: "10vw solid #FD4E43",
-      transform: "rotate(20deg)",
-      right: "8%",
-      bottom: "22%",
-    }
-  ],
-  variant2: [
-    {
-      border: "3vw solid transparent",
-      borderBottom: "5vw solid #C7F1FF",
-      transform: "rotate(45deg)",
-      left: "8%",
-      top: "20%",
-    },
-    {
-      border: "4vw solid transparent",
-      borderBottom: "8vw solid #FD4E43",
-      transform: "rotate(-30deg)",
-      right: "12%",
-      top: "15%",
-    },
-    {
-      border: "2vw solid transparent",
-      borderBottom: "4vw solid #C7F1FF",
-      transform: "rotate(70deg)",
-      left: "18%",
-      bottom: "25%",
-    },
-    {
-      border: "5vw solid transparent",
-      borderBottom: "9vw solid #FD4E43",
-      transform: "rotate(15deg)",
-      right: "6%",
-      bottom: "20%",
-    }
-  ]
-};
+const triangles = [
+  {
+    border: "5vw solid transparent",
+    borderBottom: "8vw solid #C7F1FF",
+    transform: "rotate(-25deg)",
+    left: "12%",
+    top: "18%",
+  },
+  {
+    border: "3vw solid transparent", 
+    borderBottom: "6vw solid #FD4E43",
+    transform: "rotate(55deg)",
+    right: "18%",
+    top: "15%",
+  },
+  {
+    border: "4vw solid transparent",
+    borderBottom: "7vw solid #C7F1FF", 
+    transform: "rotate(-10deg)",
+    left: "8%",
+    bottom: "30%",
+  },
+  {
+    border: "6vw solid transparent",
+    borderBottom: "11vw solid #FD4E43",
+    transform: "rotate(35deg)",
+    right: "12%",
+    bottom: "20%",
+  }
+];
 
 export default function PageLayout({ 
   children, 
   title, 
   subtitle, 
-  showIcon = true,
-  triangleVariant = 'default' 
+  showIcon = true
 }: PageLayoutProps) {
-  const triangles = triangleConfigs[triangleVariant];
 
   return (
     <Box

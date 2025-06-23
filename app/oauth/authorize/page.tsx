@@ -8,7 +8,6 @@ export default async function OAuthAuthorizationPage() {
     <PageLayout
       title="Authorize Application"
       subtitle="Please authorize this application to access your account"
-      triangleVariant="variant1"
     >
       <IdentityProvider />
     </PageLayout>

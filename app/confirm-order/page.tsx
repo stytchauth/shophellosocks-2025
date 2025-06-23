@@ -34,7 +34,6 @@ export default async function ConfirmOrderPage({
     <PageLayout
       title="Confirm Your Order"
       subtitle="Please review and confirm your sock order details below"
-      triangleVariant="variant1"
     >
       <OrderConfirmation order={order} />
     </PageLayout>

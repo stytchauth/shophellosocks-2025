@@ -10,7 +10,6 @@ export default async function Enroll() {
     <PageLayout
       title="Secure Your Account"
       subtitle="Add an extra layer of security with SMS two-factor authentication"
-      triangleVariant="default"
     >
       <SmsEnrollment />
     </PageLayout>
