@@ -74,32 +74,34 @@ export async function GET(request: NextRequest) {
       session = authResponse.user_session!;
     }
 
-    // // Check for order confirmation flow
-    // const orderId = searchParams.get('order_id');
-    // const action = searchParams.get('action');
-    //
-    // console.log({orderId, action, searchParams})
-    // if (orderId && action) {
-    //   // Redirect to order confirmation page
-    //   const response = NextResponse.redirect(new URL(`/confirm-order?order_id=${orderId}&action=${action}`, request.url));
-    //   setSessionCookie(response, authResponse.session_token, true);
-    //   return response;
-    // }
+    await setSessionCookie(session_token);
 
     // Direct to 2FA enrollment if the user does not have a phone number set
     const hasPhoneNumber = user.phone_numbers.length > 0;
     if (!hasPhoneNumber) {
-      await setSessionCookie(session_token);
       return NextResponse.redirect(new URL('/enroll', request.url));
     }
+
     // Otherwise, only direct to 2FA if the user's device isn't trusted
-    if (isKnownDevice(session, user)) {
-      await setSessionCookie(session_token);
-      return NextResponse.redirect(new URL('/cart', request.url));
-    } else {
-      await setSessionCookie(session_token);
+    if (!isKnownDevice(session, user)) {
       return NextResponse.redirect(new URL('/2fa', request.url));
     }
+
+    // If this is an order confirmation flow, direct into that
+    const orderId = searchParams.get('order_id');
+    const action = searchParams.get('action');
+    if (orderId && action) {
+      // Redirect to order confirmation page
+      return NextResponse.redirect(
+        new URL(
+          `/confirm-order?order_id=${orderId}&action=${action}`,
+          request.url
+        )
+      );
+    }
+
+    // Finally, direct to the cart if we don't have a better place to be
+    return NextResponse.redirect(new URL('/cart', request.url));
   } catch (error) {
     console.error('Stytch callback error:', error);
 

@@ -46,9 +46,7 @@ export const initializeMCPServer = (server: McpServer) => {
         contents: [
           {
             uri: uri.href,
-            text: order
-              ? `sock_type: ${order.sock_type} status: ${order.status}`
-              : 'NOT FOUND',
+            text: order ? JSON.stringify(order, null, 2) : 'NOT FOUND',
           },
         ],
       };
