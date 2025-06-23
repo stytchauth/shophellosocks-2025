@@ -1,31 +1,33 @@
-"use client";
+'use client';
 
-import { Box, Button, Typography, TextField, Divider } from "@mui/material";
-import React, { useState } from "react";
+import { Box, Button, Typography, TextField, Divider } from '@mui/material';
+import React, { useState } from 'react';
 
 function LoginForm() {
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState('');
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [emailError, setEmailError] = useState("");
+  const [emailError, setEmailError] = useState('');
 
   const handleGoogleOAuth = () => {
-    window.location.href = "/api/oauth-start";
+    window.location.href = '/api/oauth-start';
   };
 
   const sendMagicLink = async () => {
-    setEmailError("");
+    setEmailError('');
     setIsLoading(true);
-    
+
     try {
-      const response = await fetch("/api/send-magic-link", {
-        method: "POST",
+      const response = await fetch('/api/send-magic-link', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           email,
-          telemetry_id: await GetTelemetryID({publicToken: process.env.NEXT_PUBLIC_STYTCH_PUBLIC_TOKEN!})
+          telemetry_id: await GetTelemetryID({
+            publicToken: process.env.NEXT_PUBLIC_STYTCH_PUBLIC_TOKEN!,
+          }),
         }),
       });
 
@@ -34,11 +36,11 @@ function LoginForm() {
       if (response.ok) {
         setShowConfirmation(true);
       } else {
-        setEmailError(data.error_message || "Failed to send magic link");
+        setEmailError(data.error_message || 'Failed to send magic link');
       }
     } catch (error) {
-      console.error("Error sending magic link:", error);
-      setEmailError("Failed to send magic link. Please try again.");
+      console.error('Error sending magic link:', error);
+      setEmailError('Failed to send magic link. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -51,14 +53,14 @@ function LoginForm() {
   };
 
   const resetForm = () => {
-    setEmail("");
+    setEmail('');
     setShowConfirmation(false);
     setIsLoading(false);
-    setEmailError("");
+    setEmailError('');
   };
 
   return (
-    <Box sx={{ color: "black", width: "100%", maxWidth: 400 }}>
+    <Box sx={{ color: 'black', width: '100%', maxWidth: 400 }}>
       {!showConfirmation ? (
         <>
           <Button
@@ -68,16 +70,16 @@ function LoginForm() {
             sx={{
               mb: 3,
               py: 1.5,
-              backgroundColor: "#4285f4",
-              "&:hover": { backgroundColor: "#357ae8" },
+              backgroundColor: '#4285f4',
+              '&:hover': { backgroundColor: '#357ae8' },
             }}
           >
             Continue with Google
           </Button>
 
-          <Box sx={{ display: "flex", alignItems: "center", mb: 3 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
             <Divider sx={{ flex: 1 }} />
-            <Typography variant="body2" sx={{ mx: 2, color: "gray" }}>
+            <Typography variant="body2" sx={{ mx: 2, color: 'gray' }}>
               OR
             </Typography>
             <Divider sx={{ flex: 1 }} />
@@ -89,7 +91,7 @@ function LoginForm() {
               type="email"
               label="Email address"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={e => setEmail(e.target.value)}
               error={!!emailError}
               helperText={emailError}
               sx={{ mb: 2 }}
@@ -102,23 +104,20 @@ function LoginForm() {
               disabled={isLoading || !email}
               sx={{ py: 1.5 }}
             >
-              {isLoading ? "Sending..." : "Continue with Email"}
+              {isLoading ? 'Sending...' : 'Continue with Email'}
             </Button>
           </form>
         </>
       ) : (
-        <Box sx={{ textAlign: "center" }}>
+        <Box sx={{ textAlign: 'center' }}>
           <Typography variant="h6" sx={{ mb: 2 }}>
             Check your email
           </Typography>
-          <Typography variant="body2" sx={{ mb: 3, color: "gray" }}>
-            We sent a magic link to {email}. Click the link in your email to continue.
+          <Typography variant="body2" sx={{ mb: 3, color: 'gray' }}>
+            We sent a magic link to {email}. Click the link in your email to
+            continue.
           </Typography>
-          <Button
-            variant="text"
-            onClick={resetForm}
-            sx={{ color: "gray" }}
-          >
+          <Button variant="text" onClick={resetForm} sx={{ color: 'gray' }}>
             Back to email
           </Button>
         </Box>

@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import Header from "./Header";
+import Header from './Header';
 
 interface ClientHeaderProps {
   useAuthedHeader: boolean;
@@ -8,14 +8,14 @@ interface ClientHeaderProps {
   disablePrimaryButton?: boolean;
 }
 
-export default function ClientHeader({ 
-  useAuthedHeader, 
+export default function ClientHeader({
+  useAuthedHeader,
   animatePrimaryButton = true,
-  disablePrimaryButton = false 
+  disablePrimaryButton = false,
 }: ClientHeaderProps) {
   const handleLogout = () => {
     // Navigate to logout endpoint which will handle session revocation and redirect
-    window.location.href = "/api/logout";
+    window.location.href = '/api/logout';
   };
 
   return (

@@ -1,8 +1,7 @@
-import {cookies} from 'next/headers';
-import {redirect} from 'next/navigation';
+import { redirect } from 'next/navigation';
 import stytchClient from './stytchClient';
-import {User, Session} from "stytch";
-import {getSessionCookie} from "./sessionUtils";
+import { User, Session } from 'stytch';
+import { getSessionCookie } from './sessionUtils';
 
 export interface AuthResult {
   user: User;
@@ -11,26 +10,28 @@ export interface AuthResult {
 
 export async function markSessionDeviceAsTrusted(session: Session, user: User) {
   const fingerprint = session.custom_claims?.device_fingerprint as string;
-  const known_devices = (user.trusted_metadata?.known_devices ?? []) as string[];
+  const known_devices = (user.trusted_metadata?.known_devices ??
+    []) as string[];
 
   // Remember the last 5 most recently seen unique devices
   const newKnownDevices = [
     fingerprint,
-    ... known_devices.filter(device =>  device !== fingerprint)
-  ].slice(0, 5)
+    ...known_devices.filter(device => device !== fingerprint),
+  ].slice(0, 5);
 
   await stytchClient.users.update({
     user_id: user.user_id,
     trusted_metadata: {
-      known_devices: newKnownDevices
-    }
-  })
+      known_devices: newKnownDevices,
+    },
+  });
 }
 
 export function isKnownDevice(session: Session, user: User): boolean {
   const fingerprint = session.custom_claims?.device_fingerprint as string;
-  const known_devices = (user.trusted_metadata?.known_devices ?? []) as string[];
-  return known_devices.includes(fingerprint)
+  const known_devices = (user.trusted_metadata?.known_devices ??
+    []) as string[];
+  return known_devices.includes(fingerprint);
 }
 
 /**
@@ -38,7 +39,7 @@ export function isKnownDevice(session: Session, user: User): boolean {
  * Use in server components and route handlers
  */
 export async function getAuthUser(): Promise<AuthResult | null> {
-  const sessionToken =  await getSessionCookie();
+  const sessionToken = await getSessionCookie();
 
   if (!sessionToken) {
     return null;
@@ -69,10 +70,10 @@ export async function requireAuth(): Promise<AuthResult> {
 }
 
 export async function requireAdaptiveMFA(): Promise<AuthResult> {
-  const {session, user} = await requireAuth()
+  const { session, user } = await requireAuth();
 
   if (isKnownDevice(session, user)) {
-    return {session, user};
+    return { session, user };
   }
 
   const hasPhoneNumber = user.phone_numbers.length > 0;

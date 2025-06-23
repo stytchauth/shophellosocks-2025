@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from 'next/server';
 
 /**
  * Wraps a route handler with standardized error handling
@@ -16,7 +16,7 @@ export function withErrorHandling<T extends any[]>(
     } catch (error: any) {
       const context = errorContext || 'Route handler';
       console.error(`${context} error:`, error);
-      
+
       // Handle specific Stytch errors
       if (error.status_code) {
         return NextResponse.json(
@@ -24,7 +24,7 @@ export function withErrorHandling<T extends any[]>(
           { status: error.status_code }
         );
       }
-      
+
       // Handle general errors
       return NextResponse.json(
         { error_message: `${context} failed` },

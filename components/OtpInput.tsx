@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { Box, TextField } from "@mui/material";
-import React, { useState } from "react";
+import { Box, TextField } from '@mui/material';
+import React, { useState } from 'react';
 
 type Props = {
   onComplete: (code: string) => void;
@@ -10,11 +10,11 @@ type Props = {
 };
 
 function OtpInput({ onComplete, onBack, error }: Props) {
-  const [otpCode, setOtpCode] = useState("");
+  const [otpCode, setOtpCode] = useState('');
 
   const handleOtpChange = (value: string) => {
     // Only allow digits and limit to 6 characters
-    const digits = value.replace(/\D/g, "").slice(0, 6);
+    const digits = value.replace(/\D/g, '').slice(0, 6);
     setOtpCode(digits);
 
     // Auto-submit when 6 digits are entered
@@ -24,7 +24,7 @@ function OtpInput({ onComplete, onBack, error }: Props) {
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Escape" && onBack) {
+    if (e.key === 'Escape' && onBack) {
       onBack();
     }
   };
@@ -35,23 +35,23 @@ function OtpInput({ onComplete, onBack, error }: Props) {
         fullWidth
         label="6-digit code"
         value={otpCode}
-        onChange={(e) => handleOtpChange(e.target.value)}
+        onChange={e => handleOtpChange(e.target.value)}
         onKeyDown={handleKeyDown}
         error={!!error}
         helperText={error}
         inputProps={{
           maxLength: 6,
-          style: { 
-            textAlign: "center", 
-            fontSize: "1.5rem",
-            fontWeight: "bold",
-            letterSpacing: "0.5rem"
-          }
+          style: {
+            textAlign: 'center',
+            fontSize: '1.5rem',
+            fontWeight: 'bold',
+            letterSpacing: '0.5rem',
+          },
         }}
         sx={{
-          "& .MuiInputBase-root": {
-            height: "60px"
-          }
+          '& .MuiInputBase-root': {
+            height: '60px',
+          },
         }}
       />
     </Box>

@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from "next/server";
-import crypto from "crypto";
-import {setLoginState} from "../../../lib/sessionUtils";
+import { NextRequest, NextResponse } from 'next/server';
+import crypto from 'crypto';
+import { setLoginState } from '~lib/sessionUtils';
 
 // Generate PKCE code verifier and challenge
 function generatePKCE() {
@@ -19,11 +19,10 @@ function generatePKCE() {
 const publicToken = process.env.NEXT_PUBLIC_STYTCH_PUBLIC_TOKEN as string;
 
 if (!publicToken) {
-  throw Error("Missing Stytch public token" )
+  throw Error('Missing Stytch public token');
 }
 
 export async function GET(request: NextRequest) {
-
   // Generate PKCE parameters
   const { codeVerifier, codeChallenge } = generatePKCE();
 
@@ -35,7 +34,9 @@ export async function GET(request: NextRequest) {
   const redirectUrl = `${domain}/fraud/fingerprint`;
 
   // Construct Stytch OAuth start URL
-  const stytchOAuthUrl = new URL('https://test.stytch.com/v1/public/oauth/google/start');
+  const stytchOAuthUrl = new URL(
+    'https://test.stytch.com/v1/public/oauth/google/start'
+  );
   stytchOAuthUrl.searchParams.set('public_token', publicToken);
   stytchOAuthUrl.searchParams.set('login_redirect_url', redirectUrl);
   stytchOAuthUrl.searchParams.set('signup_redirect_url', redirectUrl);

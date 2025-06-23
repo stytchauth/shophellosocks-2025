@@ -7,16 +7,16 @@ import {
   useMediaQuery,
   useTheme,
   styled,
-} from "@mui/material";
-import React from "react";
-import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
-import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
-import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
-import Image from "next/image";
-import Link from "next/link";
-import { useStytch, useStytchUser } from "@stytch/nextjs";
-import AnimatedButton from "./AnimatedButton";
-import SideNavCart from "./SideNavCart";
+} from '@mui/material';
+import React from 'react';
+import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
+import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
+import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useStytch, useStytchUser } from '@stytch/nextjs';
+import AnimatedButton from './AnimatedButton';
+import SideNavCart from './SideNavCart';
 
 type Props = {
   onLogin?: () => void;
@@ -36,20 +36,20 @@ function Header({
   disablePrimaryButton,
 }: Props) {
   const theme = useTheme();
-  const showNav = useMediaQuery(theme.breakpoints.up("lg"));
+  const showNav = useMediaQuery(theme.breakpoints.up('lg'));
 
-  const showNavButtons = useMediaQuery(theme.breakpoints.up("sm"));
+  const showNavButtons = useMediaQuery(theme.breakpoints.up('sm'));
   return (
     <Box
       paddingX={3}
       paddingY={2}
       display="flex"
-      alignItems={"center"}
+      alignItems={'center'}
       justifyContent="space-between"
       sx={{
-        backgroundColor: "white",
+        backgroundColor: 'white',
         zIndex: 2,
-        borderBottom: "2px solid #000000",
+        borderBottom: '2px solid #000000',
       }}
       position="fixed"
       top={0}
@@ -57,7 +57,7 @@ function Header({
       width="100%"
     >
       <Box display="flex">
-        <Image src={"/logo.svg"} alt="logo" width={160} height={30} />
+        <Image src={'/logo.svg'} alt="logo" width={160} height={30} />
         {showNav && (
           <Stack direction="row" gap={4} ml={4}>
             <Typography variant="h3">Socks</Typography>
@@ -69,62 +69,46 @@ function Header({
         )}
       </Box>
 
-      <Stack gap={2} direction="row" alignItems={"center"}>
+      <Stack gap={2} direction="row" alignItems={'center'}>
         {useAuthedHeader ? (
           animatePrimaryButton ? (
-            <AnimatedButton
-              disabled={disablePrimaryButton}
-              onClick={onLogout}
-            >
-              <Typography variant="h3" sx={{ whiteSpace: "nowrap" }}>
+            <AnimatedButton disabled={disablePrimaryButton} onClick={onLogout}>
+              <Typography variant="h3" sx={{ whiteSpace: 'nowrap' }}>
                 Log out
               </Typography>
             </AnimatedButton>
           ) : (
-            <Button
-              disabled={disablePrimaryButton}
-              onClick={onLogout}
-            >
-              <Typography variant="h3">
-                Log out
-              </Typography>
+            <Button disabled={disablePrimaryButton} onClick={onLogout}>
+              <Typography variant="h3">Log out</Typography>
             </Button>
           )
+        ) : animatePrimaryButton ? (
+          <Link href="/login" passHref>
+            <AnimatedButton disabled={disablePrimaryButton}>
+              <Typography variant="h3" sx={{ whiteSpace: 'nowrap' }}>
+                Log in
+              </Typography>
+            </AnimatedButton>
+          </Link>
         ) : (
-          animatePrimaryButton ? (
-            <Link href="/login" passHref>
-              <AnimatedButton
-                disabled={disablePrimaryButton}
-              >
-                <Typography variant="h3" sx={{ whiteSpace: "nowrap" }}>
-                  Log in
-                </Typography>
-              </AnimatedButton>
-            </Link>
-          ) : (
-            <Link href="/login" passHref>
-              <Button
-                disabled={disablePrimaryButton}
-              >
-                <Typography variant="h3">
-                  Log in
-                </Typography>
-              </Button>
-            </Link>
-          )
+          <Link href="/login" passHref>
+            <Button disabled={disablePrimaryButton}>
+              <Typography variant="h3">Log in</Typography>
+            </Button>
+          </Link>
         )}
 
-        <Box sx={{ borderLeft: "2px solid #5C727D" }} height="27px" />
+        <Box sx={{ borderLeft: '2px solid #5C727D' }} height="27px" />
         {showNavButtons && (
           <>
-            <SearchOutlinedIcon sx={{ fontSize: 32, color: "#000" }} />
-            <Box sx={{ borderLeft: "2px solid #5C727D" }} height="27px" />
+            <SearchOutlinedIcon sx={{ fontSize: 32, color: '#000' }} />
+            <Box sx={{ borderLeft: '2px solid #5C727D' }} height="27px" />
           </>
         )}
         {showNavButtons && (
           <>
-            <FavoriteBorderOutlinedIcon sx={{ fontSize: 32, color: "#000" }} />
-            <Box sx={{ borderLeft: "2px solid #5C727D" }} height="27px" />
+            <FavoriteBorderOutlinedIcon sx={{ fontSize: 32, color: '#000' }} />
+            <Box sx={{ borderLeft: '2px solid #5C727D' }} height="27px" />
           </>
         )}
 
@@ -134,15 +118,15 @@ function Header({
             badgeContent={2}
             color="error"
             anchorOrigin={{
-              vertical: "bottom",
-              horizontal: "right",
+              vertical: 'bottom',
+              horizontal: 'right',
             }}
           >
-            <ShoppingCartOutlinedIcon sx={{ fontSize: 32, color: "#000" }} />
+            <ShoppingCartOutlinedIcon sx={{ fontSize: 32, color: '#000' }} />
           </Badge>
         ) : (
           <Button>
-            <ShoppingCartOutlinedIcon sx={{ fontSize: 32, color: "#000" }} />
+            <ShoppingCartOutlinedIcon sx={{ fontSize: 32, color: '#000' }} />
           </Button>
         )}
       </Stack>

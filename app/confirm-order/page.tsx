@@ -1,8 +1,8 @@
-import { requireAuth } from "../../lib/auth-server";
-import { redirect } from "next/navigation";
-import stytchClient from "../../lib/stytchClient";
-import OrderConfirmation from "../../components/OrderConfirmation";
-import PageLayout from "../../components/PageLayout";
+import { requireAuth } from '~lib/auth-server';
+import { redirect } from 'next/navigation';
+import stytchClient from '~lib/stytchClient';
+import OrderConfirmation from '~components//OrderConfirmation';
+import PageLayout from '~components//PageLayout';
 
 interface SearchParams {
   order_id?: string;
@@ -15,7 +15,7 @@ export default async function ConfirmOrderPage({
   searchParams: SearchParams;
 }) {
   const { user } = await requireAuth();
-  
+
   if (!searchParams.order_id || !searchParams.action) {
     redirect('/');
   }

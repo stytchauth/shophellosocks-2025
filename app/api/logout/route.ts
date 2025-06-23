@@ -1,6 +1,6 @@
-import {NextRequest, NextResponse} from "next/server";
-import stytchClient from "../../../lib/stytchClient";
-import {clearSessionCookies, getSessionCookie} from "../../../lib/sessionUtils";
+import { NextRequest, NextResponse } from 'next/server';
+import stytchClient from '~lib/stytchClient';
+import { clearSessionCookies, getSessionCookie } from '~lib/sessionUtils';
 
 export async function GET(request: NextRequest) {
   try {

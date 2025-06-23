@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { Box, Typography, CircularProgress } from "@mui/material";
-import { useEffect } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
-import PageLayout from "../../../components/PageLayout";
+import { Box, Typography, CircularProgress } from '@mui/material';
+import { useEffect } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
+import PageLayout from '~components//PageLayout';
 
 export default function FraudFingerprintPage() {
   const searchParams = useSearchParams();
@@ -14,17 +14,16 @@ export default function FraudFingerprintPage() {
       try {
         // Get telemetry ID
         const telemetryId = await GetTelemetryID({
-          publicToken: process.env.NEXT_PUBLIC_STYTCH_PUBLIC_TOKEN!
+          publicToken: process.env.NEXT_PUBLIC_STYTCH_PUBLIC_TOKEN!,
         });
 
         // Build the redirect URL with all current search params plus telemetry_id
         const currentParams = new URLSearchParams(searchParams.toString());
         currentParams.set('telemetry_id', telemetryId);
-        
+
         // Redirect to the backend stytch-callback with telemetry_id
         const redirectUrl = `/api/stytch-callback?${currentParams.toString()}`;
         window.location.href = redirectUrl;
-
       } catch (error) {
         console.error('Fraud fingerprint error:', error);
         // Redirect to login with error on failure
@@ -42,29 +41,29 @@ export default function FraudFingerprintPage() {
     >
       <Box
         sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
           gap: 3,
-          py: 4
+          py: 4,
         }}
       >
-        <CircularProgress 
-          size={60} 
-          sx={{ 
-            color: "#4CAF50" 
-          }} 
+        <CircularProgress
+          size={60}
+          sx={{
+            color: '#4CAF50',
+          }}
         />
-        <Typography 
-          variant="body1" 
-          sx={{ 
-            textAlign: "center",
-            color: "#5C727D",
-            maxWidth: 400
+        <Typography
+          variant="body1"
+          sx={{
+            textAlign: 'center',
+            color: '#5C727D',
+            maxWidth: 400,
           }}
         >
-          We&#39;re performing a quick security check to ensure your account safety.
-          This will only take a moment.
+          We&#39;re performing a quick security check to ensure your account
+          safety. This will only take a moment.
         </Typography>
       </Box>
     </PageLayout>

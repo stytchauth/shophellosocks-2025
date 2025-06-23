@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from "next/server";
-import stytchClient from "../../../../lib/stytchClient";
-import { setSessionCookie } from "../../../../lib/sessionUtils";
-import {markSessionDeviceAsTrusted} from "../../../../lib/auth-server";
+import { NextRequest, NextResponse } from 'next/server';
+import stytchClient from '~lib/stytchClient';
+import { setSessionCookie } from '~lib/sessionUtils';
+import { markSessionDeviceAsTrusted } from '~lib/auth-server';
 
 export async function POST(request: NextRequest) {
   try {
@@ -12,14 +12,14 @@ export async function POST(request: NextRequest) {
 
     if (!method_id) {
       return NextResponse.json(
-        { error_message: "SMS method ID is required" },
+        { error_message: 'SMS method ID is required' },
         { status: 400 }
       );
     }
 
     if (!code || typeof code !== 'string') {
       return NextResponse.json(
-        { error_message: "OTP code is required" },
+        { error_message: 'OTP code is required' },
         { status: 400 }
       );
     }
@@ -27,17 +27,17 @@ export async function POST(request: NextRequest) {
     // Validate code format (should be 6 digits)
     if (!/^\d{6}$/.test(code)) {
       return NextResponse.json(
-        { error_message: "Invalid OTP code format" },
+        { error_message: 'Invalid OTP code format' },
         { status: 400 }
       );
     }
 
     // Get session token from cookie
     const session_token = request.cookies.get('stytch_session')?.value;
-    
+
     if (!session_token) {
       return NextResponse.json(
-        { error_message: "Authentication required" },
+        { error_message: 'Authentication required' },
         { status: 401 }
       );
     }
@@ -54,8 +54,8 @@ export async function POST(request: NextRequest) {
 
     // Create response
     const response = NextResponse.json({
-      message: "SMS OTP verified successfully",
-      user: authResponse.user
+      message: 'SMS OTP verified successfully',
+      user: authResponse.user,
     });
 
     // Update session cookie with new session token that includes SMS factor
@@ -65,20 +65,19 @@ export async function POST(request: NextRequest) {
     response.cookies.delete('stytch_sms_method_id');
 
     return response;
-
   } catch (error: any) {
     console.error('Verify SMS OTP error:', error);
-    
+
     // Handle specific Stytch errors
     if (error.status_code) {
       return NextResponse.json(
-        { error_message: error.error_message || "Failed to verify SMS OTP" },
+        { error_message: error.error_message || 'Failed to verify SMS OTP' },
         { status: error.status_code }
       );
     }
-    
+
     return NextResponse.json(
-      { error_message: "Failed to verify SMS OTP" },
+      { error_message: 'Failed to verify SMS OTP' },
       { status: 500 }
     );
   }
