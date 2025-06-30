@@ -24,6 +24,34 @@ export const initializeMCPServer = (server: McpServer) => {
   };
 
   server.resource(
+    'Socks',
+    new ResourceTemplate('shophellosocks://socks/{id}', {
+      list: async () => {
+        const socks = await OrderService.socks();
+
+        return {
+          resources: socks.map(sock => ({
+            ...sock,
+            name: sock.sock_id,
+            uri: `shophellosocks://socks/${sock.sock_id}`,
+          })),
+        };
+      },
+    }),
+    async (uri, { id }) => {
+      const sock = await OrderService.findSock(id as string);
+      return {
+        contents: [
+          {
+            uri: uri.href,
+            text: sock ? JSON.stringify(sock, null, 2) : 'NOT FOUND',
+          },
+        ],
+      };
+    }
+  );
+
+  server.resource(
     'Orders',
     new ResourceTemplate('shophellosocks://orders/{id}', {
       list: async ({ authInfo }) => {
@@ -102,13 +130,15 @@ export const initializeMCPServer = (server: McpServer) => {
     'placeSockOrder',
     'Place a sock order and send confirmation email magic link',
     {
-      sockType: z
+      sockId: z
         .string()
-        .describe("Type of sock (e.g., 'crew', 'ankle', 'knee-high')"),
+        .describe("ID of one of the types of socks available (e.g. '1')"),
+      sockSize: z.string().describe('Sock size - S, M, L, or XL'),
     },
-    async ({ sockType }, { authInfo }) => {
+    async ({ sockId, sockSize }, { authInfo }) => {
       const svc = OrderService.fromMCPAuthInfo(authInfo);
-      const order = await svc.placeOrder({ sockType: sockType });
+      const order = await svc.placeOrder({ sockId, sockSize });
+      server.sendResourceListChanged();
       return formatResponse(
         'Sock order placed successfully! A confirmation email has been sent to the address on file.',
         order

@@ -3,9 +3,25 @@ import stytchClient from './stytchClient';
 
 export type Order = {
   order_id: string;
-  sock_type: string;
+  sock_id: string;
+  sock_size: string;
   status: string;
 };
+
+const SOCK_INVENTORY = [
+  {
+    sock_id: '1',
+    description: 'Gray crew-neck socks',
+  },
+  {
+    sock_id: '2',
+    description: 'Fuzzy pink toe socks',
+  },
+  {
+    sock_id: '3',
+    description: 'Wool ankle socks',
+  },
+];
 
 export class OrderService {
   private constructor(private userID: string) {}
@@ -38,11 +54,18 @@ export class OrderService {
     return orders.find(order => order.order_id === id);
   }
 
-  async placeOrder({ sockType }: { sockType: string }): Promise<Order> {
+  async placeOrder({
+    sockId,
+    sockSize,
+  }: {
+    sockId: string;
+    sockSize: string;
+  }): Promise<Order> {
     const user = await stytchClient.users.get({ user_id: this.userID });
     const order = {
       order_id: `order_${Date.now()}`,
-      sock_type: sockType,
+      sock_id: sockId,
+      sock_size: sockSize,
       status: 'pending_confirmation',
     };
 
@@ -89,5 +112,17 @@ export class OrderService {
     orders[idx] = cb(orders[idx]);
     await this.setOrderHistory(orders);
     return orders[idx];
+  }
+
+  static async socks() {
+    return SOCK_INVENTORY;
+  }
+
+  static async findSock(sockId: string) {
+    const sock = SOCK_INVENTORY.find(sock => sock.sock_id === sockId);
+    if (!sock) {
+      throw new Error(`invalid sock ID: ${sockId}`);
+    }
+    return sock;
   }
 }
