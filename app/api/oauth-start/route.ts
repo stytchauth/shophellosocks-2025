@@ -34,7 +34,8 @@ export async function GET(request: NextRequest) {
   const redirectUrl = `${domain}/fraud/fingerprint`;
 
   // Determine Stytch base URL based on environment
-  const isLocalhost = domain.includes('localhost') || domain.includes('127.0.0.1');
+  const isLocalhost =
+    domain.includes('localhost') || domain.includes('127.0.0.1');
   const stytchBaseUrl = isLocalhost ? 'test.stytch.com' : 'api.stytch.com';
 
   // Construct Stytch OAuth start URL
