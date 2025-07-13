@@ -11,17 +11,18 @@ interface SearchParams {
 export default async function ConfirmOrderPage({
   searchParams,
 }: {
-  searchParams: SearchParams;
+  searchParams: Promise<SearchParams>;
 }) {
   const { user } = await requireAuth();
+  const resolvedSearchParams = await searchParams;
 
-  if (!searchParams.order_id || !searchParams.action) {
+  if (!resolvedSearchParams.order_id || !resolvedSearchParams.action) {
     redirect('/');
   }
 
   // Get the order from user's trusted metadata
   const orders = user.trusted_metadata?.orders || [];
-  const order = orders.find((o: any) => o.order_id === searchParams.order_id);
+  const order = orders.find((o: any) => o.order_id === resolvedSearchParams.order_id);
 
   if (!order) {
     redirect('/');
