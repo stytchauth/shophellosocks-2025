@@ -20,6 +20,9 @@ STYTCH_PROJECT_ID=your_stytch_project_id
 STYTCH_PROJECT_SECRET=your_stytch_project_secret
 STYTCH_DOMAIN=your_stytch_domain
 NEXT_PUBLIC_STYTCH_PUBLIC_TOKEN=your_stytch_public_token
+
+# Application Configuration (optional)
+NEXT_PUBLIC_APP_URL=http://localhost:3000  # Application URL (used in email links, auto-detected on Vercel)
 ```
 
 ## Stytch Dashboard Configuration
