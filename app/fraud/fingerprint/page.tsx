@@ -1,12 +1,12 @@
 'use client';
 
 import { Box, Typography, CircularProgress } from '@mui/material';
-import { useEffect } from 'react';
+import { useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import PageLayout from '~components/PageLayout';
 
 // The FingerprintPage functions as an interstitial
-export default function FraudFingerprintPage() {
+function FraudFingerprintContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -68,5 +68,13 @@ export default function FraudFingerprintPage() {
         </Typography>
       </Box>
     </PageLayout>
+  );
+}
+
+export default function FraudFingerprintPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <FraudFingerprintContent />
+    </Suspense>
   );
 }
