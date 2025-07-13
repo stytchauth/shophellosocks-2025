@@ -22,7 +22,9 @@ export default async function ConfirmOrderPage({
 
   // Get the order from user's trusted metadata
   const orders = user.trusted_metadata?.orders || [];
-  const order = orders.find((o: any) => o.order_id === resolvedSearchParams.order_id);
+  const order = orders.find(
+    (o: any) => o.order_id === resolvedSearchParams.order_id
+  );
 
   if (!order) {
     redirect('/');
