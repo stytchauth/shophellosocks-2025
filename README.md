@@ -30,10 +30,12 @@ NEXT_PUBLIC_APP_URL=http://localhost:3000  # Application URL (used in email link
 In your Stytch dashboard, configure the following redirect URLs:
 
 ### OAuth Redirect URLs
+
 - **Login Redirect URL**: `http://localhost:3000/fraud/fingerprint`
 - **Signup Redirect URL**: `http://localhost:3000/fraud/fingerprint`
 
 ### Additional Configuration
+
 - Enable **Google OAuth** in your Stytch OAuth settings
 - Configure **Fraud & Risk** settings to enable device fingerprinting
 - Set up **Email Templates** for magic links and order confirmations. The expected template_id is `confirm_ai`
@@ -45,21 +47,29 @@ In your Stytch dashboard, configure the following redirect URLs:
     <meta charset="UTF-8" />
     <title>Confirm Your Sock Delivery</title>
   </head>
-  <body style="background-color: #f9f9f9; font-family: Arial, sans-serif; color: #333333; padding: 0; margin: 0;">
-    <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 30px; border-radius: 6px; box-shadow: 0 0 5px rgba(0, 0, 0, 0.05);">
-      <h1 style="color: #111111; font-size: 24px; margin-top: 0;">It's Sock Time 🧦</h1>
+  <body
+    style="background-color: #f9f9f9; font-family: Arial, sans-serif; color: #333333; padding: 0; margin: 0;"
+  >
+    <div
+      style="max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 30px; border-radius: 6px; box-shadow: 0 0 5px rgba(0, 0, 0, 0.05);"
+    >
+      <h1 style="color: #111111; font-size: 24px; margin-top: 0;">
+        It's Sock Time 🧦
+      </h1>
       <p style="font-size: 16px; line-height: 1.5; margin-bottom: 10px;">
         Hey {{user_first_name}}, an AI wants to send you some socks!<br />
-        Click the button below to confirm the transaction.
-        The socks will be sent to your address on file and your credit card will be charged.
+        Click the button below to confirm the transaction. The socks will be
+        sent to your address on file and your credit card will be charged.
       </p>
       <p style="font-size: 16px; font-weight: bold; margin-bottom: 20px;">
         Your link expires in 1 hour.
       </p>
-      <a href="{{magic_link_url}}"
-         target="_blank"
-         style="display: inline-block; background-color: #ff6b6b; color: #ffffff; text-decoration: none; padding: 14px 24px; font-size: 16px; font-weight: bold; border-radius: 4px; margin-top: 20px;">
-         Confirm Sock Order
+      <a
+        href="{{magic_link_url}}"
+        target="_blank"
+        style="display: inline-block; background-color: #ff6b6b; color: #ffffff; text-decoration: none; padding: 14px 24px; font-size: 16px; font-weight: bold; border-radius: 4px; margin-top: 20px;"
+      >
+        Confirm Sock Order
       </a>
     </div>
   </body>
@@ -69,11 +79,13 @@ In your Stytch dashboard, configure the following redirect URLs:
 ## Getting Started
 
 1. Install dependencies:
+
 ```bash
 npm install
 ```
 
 2. Run the development server:
+
 ```bash
 npm run dev
 ```
