@@ -137,7 +137,11 @@ export const initializeMCPServer = (server: McpServer) => {
     },
     async ({ sockId, sockSize }, { authInfo }) => {
       const svc = OrderService.fromMCPAuthInfo(authInfo);
-      const order = await svc.placeOrder({ sockId, sockSize });
+      // Get domain from environment variables or fallback to localhost
+      const domain = process.env.VERCEL_URL
+        ? `https://${process.env.VERCEL_URL}`
+        : process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+      const order = await svc.placeOrder({ sockId, sockSize, domain });
       server.sendResourceListChanged();
       return formatResponse(
         'Sock order placed successfully! A confirmation email has been sent to the address on file.',

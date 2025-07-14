@@ -31,21 +31,25 @@ This is a Next.js 15 e-commerce demo application ("Hello Socks") built with Type
   - Resources: Orders accessible via `shophellosocks://orders/{id}` URIs
 
 ### Path Aliases (configured in tsconfig.json)
+
 - `~lib/*` → `lib/*`
 - `~components/*` → `components/*`
 - `~styles/*` → `styles/*`
 
 ### Code Style
+
 - ESLint config extends Next.js core web vitals and Prettier
 - Prettier config: single quotes, semicolons, 80 char width, 2-space tabs
 - **Import restriction**: Relative imports from parent directories (`../*`) are forbidden
 
 ### Key Authentication Flows
+
 1. **Login**: Magic links, OAuth, or SMS OTP via Stytch
 2. **Adaptive MFA**: Device fingerprinting determines if 2FA is required
 3. **Device Trust**: Up to 5 most recent devices stored per user
 4. **Session Management**: Server-side session validation with `getAuthUser()` and `requireAuth()`
 
 ### Environment Dependencies
+
 - Stytch project credentials (`STYTCH_PROJECT_ID`, `STYTCH_PROJECT_SECRET`, `STYTCH_DOMAIN`)
 - Next.js environment variables in `.env.local`

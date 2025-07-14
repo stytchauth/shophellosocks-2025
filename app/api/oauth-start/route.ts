@@ -33,9 +33,14 @@ export async function GET(request: NextRequest) {
   const domain = request.nextUrl.origin;
   const redirectUrl = `${domain}/fraud/fingerprint`;
 
+  // Determine Stytch base URL based on environment
+  const isLocalhost =
+    domain.includes('localhost') || domain.includes('127.0.0.1');
+  const stytchBaseUrl = isLocalhost ? 'test.stytch.com' : 'api.stytch.com';
+
   // Construct Stytch OAuth start URL
   const stytchOAuthUrl = new URL(
-    'https://test.stytch.com/v1/public/oauth/google/start'
+    `https://${stytchBaseUrl}/v1/public/oauth/google/start`
   );
   stytchOAuthUrl.searchParams.set('public_token', publicToken);
   stytchOAuthUrl.searchParams.set('login_redirect_url', redirectUrl);

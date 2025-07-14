@@ -57,9 +57,11 @@ export class OrderService {
   async placeOrder({
     sockId,
     sockSize,
+    domain,
   }: {
     sockId: string;
     sockSize: string;
+    domain?: string;
   }): Promise<Order> {
     const user = await stytchClient.users.get({ user_id: this.userID });
     const order = {
@@ -69,7 +71,7 @@ export class OrderService {
       status: 'pending_confirmation',
     };
 
-    const confirmURL = `http://localhost:3000/fraud/fingerprint?order_id=${order.order_id}&action=confirm`;
+    const confirmURL = `${domain || 'http://localhost:3000'}/fraud/fingerprint?order_id=${order.order_id}&action=confirm`;
 
     await stytchClient.magicLinks.email.send({
       email: user.emails[0].email,
