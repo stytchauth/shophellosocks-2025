@@ -1,5 +1,33 @@
 import '~styles/globals.css';
 import { Providers } from './providers';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Hello Socks',
+  description: 'Premium sock shopping experience',
+  icons: {
+    icon: '/favicon.png',
+  },
+  openGraph: {
+    title: 'Hello Socks',
+    description: 'The first agent ready sock shopping experience',
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'Hello Socks Logo',
+      },
+    ],
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Hello Socks',
+    description: 'The first agent ready sock shopping experience',
+    images: ['/og-image.png'],
+  },
+};
 
 export default function RootLayout({
   children,
