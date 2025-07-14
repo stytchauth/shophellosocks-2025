@@ -103,7 +103,7 @@ function LoginForm() {
               variant="contained"
               fullWidth
               disabled={isLoading || !email}
-              sx={{ 
+              sx={{
                 py: 1.5,
                 backgroundColor: '#FFE136',
                 color: 'black',
