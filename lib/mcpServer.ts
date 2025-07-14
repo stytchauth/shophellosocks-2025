@@ -138,9 +138,11 @@ export const initializeMCPServer = (server: McpServer) => {
     async ({ sockId, sockSize }, { authInfo }) => {
       const svc = OrderService.fromMCPAuthInfo(authInfo);
       // Get domain from environment variables or fallback to localhost
-      const domain = process.env.VERCEL_URL
-        ? `https://${process.env.VERCEL_URL}`
-        : process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+      // Use VERCEL_PROJECT_PRODUCTION_URL for production domain (includes custom domains)
+      const domain = process.env.VERCEL_PROJECT_PRODUCTION_URL
+        ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+        : process.env.NEXT_PUBLIC_APP_URL || 
+          (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000');
       const order = await svc.placeOrder({ sockId, sockSize, domain });
       server.sendResourceListChanged();
       return formatResponse(
