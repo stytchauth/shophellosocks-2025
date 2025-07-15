@@ -15,6 +15,18 @@ const styles = {
   container: {
     borderColor: '#FFF',
   },
+  buttons: {
+    primary: {
+      backgroundColor: '#FFE136',
+      textColor: 'black',
+      borderColor: '#FFE136',
+    },
+    secondary: {
+      textColor: 'black',
+      backgroundColor: 'transparent',
+      borderColor: 'transparent',
+    },
+  },
 } satisfies StyleConfig;
 
 // The IdentityProvider is the only part of this demo that uses the Stytch B2C UI components

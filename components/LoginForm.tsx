@@ -70,8 +70,9 @@ function LoginForm() {
             sx={{
               mb: 3,
               py: 1.5,
-              backgroundColor: '#4285f4',
-              '&:hover': { backgroundColor: '#357ae8' },
+              backgroundColor: '#FFE136',
+              color: 'black',
+              '&:hover': { backgroundColor: '#E6CB2F' },
             }}
           >
             Continue with Google
@@ -102,7 +103,12 @@ function LoginForm() {
               variant="contained"
               fullWidth
               disabled={isLoading || !email}
-              sx={{ py: 1.5 }}
+              sx={{
+                py: 1.5,
+                backgroundColor: '#FFE136',
+                color: 'black',
+                '&:hover': { backgroundColor: '#E6CB2F' },
+              }}
             >
               {isLoading ? 'Sending...' : 'Continue with Email'}
             </Button>
