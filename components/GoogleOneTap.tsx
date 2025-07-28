@@ -1,94 +1,48 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
-import { useStytch, StytchProvider } from '@stytch/nextjs';
+import { useEffect } from 'react';
+import { useStytch, useStytchSession, StytchProvider } from '@stytch/nextjs';
 import { createStytchUIClient } from '@stytch/nextjs/ui';
 
 interface GoogleOneTapProps {
-  onSuccess?: (token: string) => void;
-  onError?: (error: any) => void;
-  onDismiss?: () => void;
-  autoShow?: boolean;
+  showOnScroll?: boolean;
+  scrollThreshold?: number;
 }
 
 const stytchClient = createStytchUIClient(
   process.env.NEXT_PUBLIC_STYTCH_PUBLIC_TOKEN || ''
 );
 
-function GoogleOneTapContent({
-  onSuccess,
-  onError,
-  onDismiss,
-  autoShow = true,
-}: GoogleOneTapProps) {
+function GoogleOneTapContent({ scrollThreshold = 300 }: GoogleOneTapProps) {
   const stytch = useStytch();
-  const initialized = useRef(false);
+  const { isInitialized, session } = useStytchSession();
+  const isLoggedIn = isInitialized && !!session;
 
   useEffect(() => {
-    if (initialized.current) return;
+    if (typeof window === 'undefined' || isLoggedIn) return;
 
-    const initializeOneTap = async () => {
-      try {
-        // Check if we're in a browser environment
-        if (typeof window === 'undefined') return;
+    let hasTriggered = false;
 
-        // Get the current domain for redirect URL
-        const domain = window.location.origin;
-        const redirectUrl = `${domain}/fraud/fingerprint`;
+    const checkScroll = () => {
+      if (hasTriggered || window.scrollY < scrollThreshold) return;
 
-        console.log('Initializing Google One Tap with:', {
-          login_redirect_url: redirectUrl,
-          signup_redirect_url: redirectUrl,
-        });
+      // Set flag and remove listener immediately to prevent multiple triggers
+      hasTriggered = true;
+      window.removeEventListener('scroll', checkScroll);
 
-        // Initialize Google One Tap with Stytch
-        stytch.oauth.googleOneTap.start({
-          login_redirect_url: redirectUrl,
-          signup_redirect_url: redirectUrl,
-        });
+      const redirectUrl = `${window.location.origin}/fraud/fingerprint`;
 
-        initialized.current = true;
-        console.log('Google One Tap initialized successfully');
-      } catch (error) {
-        console.error('Failed to initialize Google One Tap:', error);
-        onError?.(error);
-      }
-    };
-
-    if (autoShow) {
-      // Add a small delay to ensure the page is fully loaded
-      const timer = setTimeout(() => {
-        initializeOneTap();
-      }, 1000);
-
-      return () => clearTimeout(timer);
-    }
-  }, [stytch, autoShow, onError]);
-
-  const showOneTap = () => {
-    try {
-      const domain = window.location.origin;
-      const redirectUrl = `${domain}/fraud/fingerprint`;
-
-      console.log('Manually showing Google One Tap');
       stytch.oauth.googleOneTap.start({
         login_redirect_url: redirectUrl,
         signup_redirect_url: redirectUrl,
       });
-    } catch (error) {
-      console.error('Failed to show Google One Tap:', error);
-      onError?.(error);
-    }
-  };
+    };
 
-  // Expose methods for external use
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      (window as any).showGoogleOneTap = showOneTap;
-    }
-  }, [showOneTap]);
+    window.addEventListener('scroll', checkScroll, { passive: true });
+    return () => window.removeEventListener('scroll', checkScroll);
+  }, [stytch, scrollThreshold, isLoggedIn]);
 
-  return null; // This component doesn't render anything visible
+  return null;
 }
 
 export default function GoogleOneTap(props: GoogleOneTapProps) {
@@ -97,4 +51,4 @@ export default function GoogleOneTap(props: GoogleOneTapProps) {
       <GoogleOneTapContent {...props} />
     </StytchProvider>
   );
-} 
+}

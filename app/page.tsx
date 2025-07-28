@@ -3,6 +3,7 @@ import Image from 'next/image';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ClientHeader from '~components/ClientHeader';
 import SiteFooter from '~components/SiteFooter';
+import GoogleOneTap from '~components/GoogleOneTap';
 import { getAuthUser } from '~lib/auth';
 
 export default async function Home() {
@@ -16,6 +17,7 @@ export default async function Home() {
       paddingTop={'76px'}
     >
       <ClientHeader useAuthedHeader={!!authResult} />
+      <GoogleOneTap scrollThreshold={300} />
 
       <Box
         sx={{
