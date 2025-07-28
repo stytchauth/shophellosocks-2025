@@ -17,7 +17,7 @@ export default async function Home() {
       paddingTop={'76px'}
     >
       <ClientHeader useAuthedHeader={!!authResult} />
-      <GoogleOneTap scrollThreshold={300} />
+      <GoogleOneTap delay={2000} />
 
       <Box
         sx={{

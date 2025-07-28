@@ -5,15 +5,14 @@ import { useStytch, useStytchSession, StytchProvider } from '@stytch/nextjs';
 import { createStytchUIClient } from '@stytch/nextjs/ui';
 
 interface GoogleOneTapProps {
-  showOnScroll?: boolean;
-  scrollThreshold?: number;
+  delay?: number; // in milliseconds
 }
 
 const stytchClient = createStytchUIClient(
   process.env.NEXT_PUBLIC_STYTCH_PUBLIC_TOKEN || ''
 );
 
-function GoogleOneTapContent({ scrollThreshold = 300 }: GoogleOneTapProps) {
+function GoogleOneTapContent({ delay = 2000 }: GoogleOneTapProps) {
   const stytch = useStytch();
   const { isInitialized, session } = useStytchSession();
   const isLoggedIn = isInitialized && !!session;
@@ -23,12 +22,9 @@ function GoogleOneTapContent({ scrollThreshold = 300 }: GoogleOneTapProps) {
 
     let hasTriggered = false;
 
-    const checkScroll = () => {
-      if (hasTriggered || window.scrollY < scrollThreshold) return;
-
-      // Set flag and remove listener immediately to prevent multiple triggers
+    const triggerOneTap = () => {
+      if (hasTriggered) return;
       hasTriggered = true;
-      window.removeEventListener('scroll', checkScroll);
 
       const redirectUrl = `${window.location.origin}/fraud/fingerprint`;
 
@@ -38,9 +34,9 @@ function GoogleOneTapContent({ scrollThreshold = 300 }: GoogleOneTapProps) {
       });
     };
 
-    window.addEventListener('scroll', checkScroll, { passive: true });
-    return () => window.removeEventListener('scroll', checkScroll);
-  }, [stytch, scrollThreshold, isLoggedIn]);
+    const timer = setTimeout(triggerOneTap, delay);
+    return () => clearTimeout(timer);
+  }, [stytch, delay, isLoggedIn]);
 
   return null;
 }
