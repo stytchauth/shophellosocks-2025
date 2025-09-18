@@ -126,21 +126,17 @@ export const initializeMCPServer = (server: McpServer) => {
   );
 
   // Fetch sock inventory tool
-  server.tool(
-    'checkInventory',
-    'Check what socks are available',
-    async () => {
-      const socks = await OrderService.socks();
+  server.tool('checkInventory', 'Check what socks are available', async () => {
+    const socks = await OrderService.socks();
 
-        return {
-          content: socks.map(sock => ({
-            ...sock,
-            type: 'text',
-            text: `${sock.description} (ID: ${sock.sock_id})`,
-          })),
-      };
-    }
-  );
+    return {
+      content: socks.map(sock => ({
+        ...sock,
+        type: 'text',
+        text: `${sock.description} (ID: ${sock.sock_id})`,
+      })),
+    };
+  });
 
   // Place sock order tool
   server.tool(
