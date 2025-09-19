@@ -46,15 +46,19 @@ export async function getAuthUser(): Promise<AuthResult | null> {
     return null;
   }
 
-  // Authenticate the session
-  const authResponse = await stytchClient.sessions.authenticate({
-    session_token: sessionToken,
-  });
-
-  return {
-    user: authResponse.user,
-    session: authResponse.session,
-  };
+  try {
+    // Authenticate the session
+    const authResponse = await stytchClient.sessions.authenticate({
+      session_token: sessionToken,
+    });
+    return {
+      user: authResponse.user,
+      session: authResponse.session,
+    };
+  } catch (error) {
+    console.error('could not authenticate session', error);
+    return null;
+  }
 }
 
 /**
