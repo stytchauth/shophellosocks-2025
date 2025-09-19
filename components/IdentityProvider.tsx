@@ -3,6 +3,7 @@
 import {
   IdentityProvider as BaseIdentityProvider,
   StytchProvider,
+  useStytchUser,
 } from '@stytch/nextjs';
 import { createStytchUIClient } from '@stytch/nextjs/ui';
 import { StyleConfig } from '@stytch/vanilla-js';
@@ -29,6 +30,15 @@ const styles = {
   },
 } satisfies StyleConfig;
 
+function DebounceWrapper() {
+  // Wait for the Stytch user object to be loaded by the SDK to prevent flicker on first load
+  const { user } = useStytchUser();
+  if (!user) {
+    return null;
+  }
+  return <BaseIdentityProvider styles={styles} />;
+}
+
 // The IdentityProvider is the only part of this demo that uses the Stytch B2C UI components
 // During local development, it reads from the stytch_session cookie stored by the backend servies
 // During remote deployment, CNAMEs are utilized to share the cookie information between your
@@ -36,7 +46,7 @@ const styles = {
 export function IdentityProvider() {
   return (
     <StytchProvider stytch={client}>
-      <BaseIdentityProvider styles={styles} />
+      <DebounceWrapper />
     </StytchProvider>
   );
 }

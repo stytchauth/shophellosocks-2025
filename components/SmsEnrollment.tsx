@@ -4,6 +4,7 @@ import { Box, Button, Typography, TextField } from '@mui/material';
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import OtpInput from './OtpInput';
+import { loginComplete } from '~lib/returnTo';
 
 function SmsEnrollment() {
   const router = useRouter();
@@ -80,7 +81,7 @@ function SmsEnrollment() {
 
       if (response.ok) {
         // Success - redirect to cart using Next.js router
-        router.push('/cart');
+        loginComplete();
       } else {
         setOtpError(data.error_message || 'Failed to verify SMS OTP');
       }
