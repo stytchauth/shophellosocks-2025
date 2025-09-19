@@ -7,6 +7,7 @@ import {
 } from '~lib/sessionUtils';
 import { Session, User } from 'stytch';
 import { isKnownDevice } from '~lib/auth';
+import { loginComplete } from '~lib/returnTo';
 
 export async function GET(request: NextRequest) {
   try {
@@ -101,7 +102,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Finally, direct to the cart if we don't have a better place to be
-    return NextResponse.redirect(new URL('/cart', request.url));
+    return loginComplete();
   } catch (error) {
     console.error('Stytch callback error:', error);
 

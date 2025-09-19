@@ -4,6 +4,7 @@ import { Box, Button, Typography } from '@mui/material';
 import React, { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import OtpInput from './OtpInput';
+import { loginComplete } from '~lib/returnTo';
 
 interface TwoFactorAuthProps {
   user: any;
@@ -94,8 +95,8 @@ function TwoFactorAuth({ user }: TwoFactorAuthProps) {
       const data = await response.json();
 
       if (response.ok) {
-        // Success - redirect to cart
-        router.push('/cart');
+        // Success - redirect to returnTo
+        loginComplete();
       } else {
         setOtpError(data.error_message || 'Failed to verify SMS OTP');
       }

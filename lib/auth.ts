@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation';
 import stytchClient from './stytchClient';
 import { User, Session } from 'stytch';
 import { getSessionCookie } from './sessionUtils';
+import { headers } from 'next/headers';
 
 export interface AuthResult {
   user: User;
@@ -61,9 +62,22 @@ export async function getAuthUser(): Promise<AuthResult | null> {
  */
 export async function requireAuth(): Promise<AuthResult> {
   const authResult = await getAuthUser();
+  const requestHeaders = await headers();
+
+  // Nextjs App Router doesn't let us set cookies from server components
+  // so to persist the returnTo URL we pass it as a query param to the Login page
+  // and then the Login page will execute a server action to save it in a cookie
+  // ref: https://github.com/vercel/next.js/discussions/49843#discussioncomment-7006149
+  let loginLocation = '/login';
+  const xUrl = requestHeaders.get('x-url') || '';
+  if (xUrl) {
+    const currentUrl = new URL(xUrl);
+    const returnTo = currentUrl.pathname + currentUrl.search;
+    loginLocation += '?' + new URLSearchParams({ returnTo }).toString();
+  }
 
   if (!authResult) {
-    redirect('/login');
+    redirect(loginLocation);
   }
 
   return authResult;

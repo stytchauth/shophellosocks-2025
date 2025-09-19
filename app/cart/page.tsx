@@ -5,10 +5,15 @@ import { requireAdaptiveMFA, requireAuth } from '~lib/auth';
 import ClientHeader from '~components/ClientHeader';
 import SiteFooter from '~components/SiteFooter';
 import ProductEntry from '~components/ProductEntry';
+import { headers } from 'next/headers';
 
 export default async function Cart() {
   // Require authentication with 2FA
   const { user } = await requireAdaptiveMFA();
+  const headersList = await headers();
+  // read the custom x-url header
+  const currentUrl = headersList.get('x-url') || '';
+  const domain = new URL(currentUrl).origin;
 
   return (
     <Box
@@ -44,6 +49,24 @@ export default async function Cart() {
               <Typography
                 ml={1}
               >{`Email: ${user.emails?.[0]?.email || 'N/A'}`}</Typography>
+            </Box>
+          </Box>
+          <Box
+            sx={{ backgroundColor: 'white', border: '2px solid #000000' }}
+            padding={2}
+          >
+            <Box display={'flex'} alignItems="center" mb={1}>
+              <CheckCircleOutlineIcon
+                sx={{ fontSize: '32px', color: '#179F97' }}
+              />
+              <Typography variant="h2" ml={1}>
+                Shop with an AI Agent
+              </Typography>
+            </Box>
+
+            <Box display={'flex'} alignItems="center" mb={1}>
+              <Box sx={{ width: '32px' }} />
+              <Typography ml={1}>{`MCP URL: ${domain}/mcp`}</Typography>
             </Box>
           </Box>
           <Box

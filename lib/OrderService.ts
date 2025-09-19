@@ -10,16 +10,44 @@ export type Order = {
 
 const SOCK_INVENTORY = [
   {
-    sock_id: '1',
-    description: 'Gray crew-neck socks',
+    sock_id: '0001',
+    description:
+      'Storm Gray Crew Classics - The reliable workhorses of your sock drawer',
   },
   {
-    sock_id: '2',
-    description: 'Fuzzy pink toe socks',
+    sock_id: '0002',
+    description:
+      'Bubblegum Pink Toe Huggers - Fluffy clouds for each little piggy',
   },
   {
-    sock_id: '3',
-    description: 'Wool ankle socks',
+    sock_id: '0003',
+    description:
+      'Alpine Wool Ankle Warmers - Mountain-grade comfort for everyday adventures',
+  },
+  {
+    sock_id: '0004',
+    description:
+      'Marathon Cloud Cushions - Like running on marshmallows, but faster',
+  },
+  {
+    sock_id: '0005',
+    description:
+      'Midnight Black Dress Elites - Sleek sophistication from boardroom to ballroom',
+  },
+  {
+    sock_id: '0006',
+    description:
+      'Rainbow Stripe Happy Feet - Because life is too short for boring socks',
+  },
+  {
+    sock_id: '0007',
+    description:
+      'Bamboo Zen No-Shows - Invisible comfort with eco-friendly superpowers',
+  },
+  {
+    sock_id: '0008',
+    description:
+      'Arctic Thermal Boot Socks - Winter warrior armor for your feet',
   },
 ];
 
