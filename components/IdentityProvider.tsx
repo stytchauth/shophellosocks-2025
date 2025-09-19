@@ -30,7 +30,7 @@ const styles = {
   },
 } satisfies StyleConfig;
 
-function IdentityProviderContainer() {
+function DebounceWrapper() {
   // Wait for the Stytch user object to be loaded by the SDK to prevent flicker on first load
   const { user } = useStytchUser();
   if (!user) {
@@ -46,7 +46,7 @@ function IdentityProviderContainer() {
 export function IdentityProvider() {
   return (
     <StytchProvider stytch={client}>
-      <IdentityProviderContainer />
+      <DebounceWrapper />
     </StytchProvider>
   );
 }

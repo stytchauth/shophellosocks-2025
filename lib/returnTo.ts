@@ -3,7 +3,6 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
 export async function setReturnTo(returnTo: string | null) {
-  'use server';
   if (!returnTo) {
     return;
   }
