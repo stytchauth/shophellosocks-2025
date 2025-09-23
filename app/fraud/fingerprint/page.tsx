@@ -16,6 +16,7 @@ function FraudFingerprintContent() {
         // Get telemetry ID
         const telemetryId = await GetTelemetryID({
           publicToken: process.env.NEXT_PUBLIC_STYTCH_PUBLIC_TOKEN!,
+          submitURL: 'fp.shophellosocks.com',
         });
 
         // Build the redirect URL with all current search params plus telemetry_id
