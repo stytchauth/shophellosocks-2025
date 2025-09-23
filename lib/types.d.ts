@@ -1,5 +1,8 @@
 declare global {
-  function GetTelemetryID(params: { publicToken: string }): Promise<string>;
+  function GetTelemetryID(params: {
+    publicToken: string;
+    submitURL: string;
+  }): Promise<string>;
 }
 
 export {};
