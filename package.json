@@ -16,7 +16,7 @@
     "@emotion/styled": "^11.14.0",
     "@mui/icons-material": "^6.4.2",
     "@mui/material": "^6.4.2",
-    "@stytch/nextjs": "^21.5.3",
+    "@stytch/nextjs": "^21.18.1",
     "@stytch/vanilla-js": "^5.24.6",
     "@vercel/mcp-adapter": "^0.11.1",
     "next": "^15.3.4",
